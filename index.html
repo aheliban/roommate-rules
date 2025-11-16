@@ -150,7 +150,6 @@
       orderBy
     } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
 
-    // 1) FILL THIS IN from your Firebase console (Project settings -> Web app config)
     const firebaseConfig = {
       apiKey: "AIzaSyAGgZCLDYuVuH2lGZtuOzw8zgmJeLDsUHI",
       authDomain: "apt-rules--polling.firebaseapp.com",
@@ -195,13 +194,10 @@
     // Load voter hash from localStorage if present
     async function initVoterFromStorage() {
       const stored = localStorage.getItem("voterHash");
-      if (stored && ALLOWED_VOTER_HASHES.includes(stored)) {
+      if (stored) {
         currentVoterHash = stored;
         voterStatus.textContent = "Voter code set (hash " + shortHash(stored) + ")";
         voterStatus.classList.remove("danger");
-      } else if (stored) {
-        // invalid / outdated
-        localStorage.removeItem("voterHash");
       }
     }
 
