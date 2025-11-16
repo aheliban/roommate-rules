@@ -45,8 +45,8 @@
       min-height: 100vh;
       font-family: "Quicksand", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       background:
-        radial-gradient(circle at top left, rgba(125, 211, 252, 0.85) 0, transparent 55%),  /* sky blue */
-        radial-gradient(circle at top right, rgba(249, 168, 212, 0.85) 0, transparent 55%), /* baby pink */
+        radial-gradient(circle at top left, rgba(125, 211, 252, 0.85) 0, transparent 55%),   /* sky blue */
+        radial-gradient(circle at top right, rgba(249, 168, 212, 0.85) 0, transparent 55%),  /* baby pink */
         radial-gradient(circle at bottom left, rgba(233, 213, 255, 0.9) 0, transparent 55%),/* light purple */
         radial-gradient(circle at bottom right, rgba(187, 247, 208, 0.9) 0, transparent 55%),/* mint green */
         var(--bg);
@@ -65,9 +65,9 @@
       background: linear-gradient(
         145deg,
         #fef9ff 0%,
-        rgba(125, 211, 252, 0.22) 25%,  /* sky blue wash */
-        rgba(233, 213, 255, 0.32) 60%,  /* light purple wash */
-        rgba(187, 247, 208, 0.35) 100%  /* green wash */
+        rgba(125, 211, 252, 0.22) 25%,   /* sky blue wash */
+        rgba(233, 213, 255, 0.32) 60%,   /* light purple wash */
+        rgba(187, 247, 208, 0.35) 100%   /* green wash */
       );
       border-radius: 24px;
       padding: 1.8rem 1.8rem 1.6rem;
@@ -323,8 +323,29 @@
       flex-direction: column;
     }
 
+    .rules-top-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      margin-bottom: 0.3rem;
+    }
+
+    .hide-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .hide-toggle input {
+      accent-color: #6d28d9; /* purple checkbox */
+    }
+
     #rules-list {
-      margin-top: 0.4rem;
+      margin-top: 0.2rem;
       padding-top: 0.5rem;
       border-top: 1px dashed #e5e7eb;
       overflow-y: auto;
@@ -348,10 +369,30 @@
     .rule {
       padding: 0.75rem 0.25rem;
       border-bottom: 1px dashed #e5e7eb;
+      transition: background 0.15s ease, transform 0.08s ease, box-shadow 0.08s ease;
     }
 
     .rule:last-child {
       border-bottom: none;
+    }
+
+    .rule.need-your-vote {
+      background: rgba(125, 211, 252, 0.18); /* soft blue highlight */
+      border-radius: 14px;
+      padding: 0.9rem 0.5rem;
+      margin: 0.15rem -0.25rem;
+      box-shadow: 0 6px 14px rgba(148, 163, 184, 0.25);
+    }
+
+    .rule.completed {
+      background: rgba(249, 250, 251, 0.9); /* light grey */
+      border-radius: 12px;
+      padding: 0.85rem 0.5rem;
+      margin: 0.15rem -0.25rem;
+    }
+
+    .rule.already-voted {
+      opacity: 0.92;
     }
 
     .rule-header {
@@ -458,10 +499,10 @@
     <header class="hero">
       <!-- wifi + badges removed on purpose -->
 
-      <h1 class="hero-title">Camel & Rain Tea</h1>
-      <p class="hero-subtitle">Apt Rules Voting</p>
+      <h1 class="hero-title">Camel and Rain Tea</h1>
+      <p class="hero-subtitle">Apartment Rules Voting</p>
       <p class="hero-tagline">
-        Anonymous rules & votes ~ a rule only passes if all four roomies say yes.
+        Anonymous proposals & votes – a rule only passes if all four of you say yes.
       </p>
     </header>
 
@@ -471,20 +512,29 @@
           <span class="eyebrow">Step 1</span> Set your secret voter code
         </h2>
         <p class="section-desc">
-          Pick a new code every time you vote. Keep your code private! Only allowed to discuss a rule after everyone's voted.
+          Each roommate picks a private code (only you know yours). Your code is stored
+          locally on your device as a hash – no names, no emails, no way to link votes to people.
         </p>
         <label for="voterCodeInput">Secret voter code</label>
         <input
           type="text"
           id="voterCodeInput"
-          placeholder="your voter code"
+          placeholder="something only you will remember"
         />
         <div class="btn-row">
           <button class="primary" id="setCodeBtn">
             <span>Set code</span>
           </button>
+          <button class="secondary" type="button" id="randomCodeBtn">
+            Random cute code
+          </button>
         </div>
         <p id="voterStatus" class="small"></p>
+
+        <p class="small" style="margin-top: 0.4rem;">
+          Your code is only saved on your device (as a hash). No one – including the person who made this page –
+          can see who voted what.
+        </p>
 
         <hr style="border: 0; border-top: 1px dashed #f3d9ff; margin: 1.1rem 0 0.85rem;" />
 
@@ -492,7 +542,7 @@
           <span class="eyebrow">Step 2</span> Add a rule
         </h2>
         <p class="section-desc">
-          Phrase your proposed rule neutrally. No mentioning names.
+          Anyone can propose a rule. Keep it general and kind (no names, no calling people out).
         </p>
         <label for="ruleText">Rule text</label>
         <textarea id="ruleText" placeholder="No loud music after 11pm."></textarea>
@@ -513,6 +563,14 @@
           <strong>YES</strong> or <strong>NO</strong> on each rule. When all four votes are in,
           the final tally appears. Unanimous yes = the rule is adopted.
         </p>
+
+        <div class="rules-top-row">
+          <p id="pendingSummary" class="small"></p>
+          <label class="hide-toggle small">
+            <input type="checkbox" id="hideCompletedToggle" />
+            Hide completed rules
+          </label>
+        </div>
 
         <div id="rules-list">
           <p class="small">Loading rules…</p>
@@ -558,6 +616,7 @@
 
     const voterInput = document.getElementById("voterCodeInput");
     const setCodeBtn = document.getElementById("setCodeBtn");
+    const randomCodeBtn = document.getElementById("randomCodeBtn");
     const voterStatus = document.getElementById("voterStatus");
 
     const ruleTextInput = document.getElementById("ruleText");
@@ -565,8 +624,35 @@
     const proposeStatus = document.getElementById("proposeStatus");
 
     const rulesList = document.getElementById("rules-list");
+    const pendingSummary = document.getElementById("pendingSummary");
+    const hideCompletedToggle = document.getElementById("hideCompletedToggle");
 
     let currentVoterHash = null;
+
+    // --- random cute code generator ---
+    function generateRandomCode() {
+      const adjectives = [
+        "sleepy", "sparkly", "green", "purple", "sky",
+        "soft", "chill", "quiet", "cozy", "gentle"
+      ];
+      const nouns = [
+        "camel", "tea", "rain", "pillow", "mug",
+        "cloud", "plant", "lantern", "blanket", "cactus"
+      ];
+      const adj = adjectives[Math.floor(Math.random() * adjectives.length)];
+      const noun = nouns[Math.floor(Math.random() * nouns.length)];
+      const num = Math.floor(Math.random() * 90) + 10;
+      return `${adj}-${noun}-${num}`;
+    }
+
+    if (randomCodeBtn) {
+      randomCodeBtn.addEventListener("click", () => {
+        const code = generateRandomCode();
+        voterInput.value = code;
+        voterInput.focus();
+        voterInput.select();
+      });
+    }
 
     // --- hashing helper ---
     async function hashCodeToHex(code) {
@@ -647,43 +733,52 @@
       }
     });
 
-    // --- load and render rules ---
-    async function loadRules() {
-      rulesList.innerHTML = "<p class='small'>Loading…</p>";
-      try {
-        const rulesRef = collection(db, "rules");
-        const qRules = query(rulesRef, orderBy("createdAt", "desc"));
-        const snap = await getDocs(qRules);
+    // --- helpers for UI state ---
+    function updatePendingSummary(pendingCount, totalRules) {
+      if (!pendingSummary) return;
 
-        if (snap.empty) {
-          rulesList.innerHTML =
-            "<p class='small'>No rules yet. Someone be brave and add the first one ✨</p>";
-          return;
+      if (!currentVoterHash) {
+        if (totalRules === 0) {
+          pendingSummary.textContent =
+            "Set your secret voter code above to start proposing and voting on rules.";
+        } else {
+          pendingSummary.textContent =
+            "Set your secret voter code above to start voting on these rules.";
         }
+        return;
+      }
 
-        rulesList.innerHTML = "";
-        for (const ruleDoc of snap.docs) {
-          await renderRule(ruleDoc);
-        }
-      } catch (err) {
-        console.error(err);
-        rulesList.innerHTML =
-          "<p class='small danger'>Error loading rules. Check Firebase config / rules.</p>";
+      if (totalRules === 0) {
+        pendingSummary.textContent =
+          "No rules yet. Someone be brave and add the first one ✨";
+        return;
+      }
+
+      if (pendingCount === 0) {
+        pendingSummary.textContent = "You’re all caught up for now 💚";
+      } else if (pendingCount === 1) {
+        pendingSummary.textContent = "You have 1 rule waiting for your vote.";
+      } else {
+        pendingSummary.textContent =
+          "You have " + pendingCount + " rules waiting for your vote.";
       }
     }
 
-    function formatDate(ts) {
-      if (!ts || !ts.toDate) return "";
-      const d = ts.toDate();
-      return d.toLocaleString(undefined, {
-        month: "short",
-        day: "numeric",
-        hour: "2-digit",
-        minute: "2-digit"
+    function applyHideCompleted() {
+      if (!hideCompletedToggle) return;
+      const hide = hideCompletedToggle.checked;
+      const completedRules = document.querySelectorAll(".rule.completed");
+      completedRules.forEach((ruleEl) => {
+        ruleEl.style.display = hide ? "none" : "";
       });
     }
 
-    async function renderRule(ruleDoc) {
+    if (hideCompletedToggle) {
+      hideCompletedToggle.addEventListener("change", applyHideCompleted);
+    }
+
+    // --- build rule DOM element (returns wrapper + flags) ---
+    async function buildRuleElement(ruleDoc) {
       const data = ruleDoc.data();
       const ruleId = ruleDoc.id;
 
@@ -722,10 +817,16 @@
 
       const metaRow = document.createElement("div");
       metaRow.className = "meta-row";
-      const created = formatDate(data.createdAt);
-      if (created) {
+      const createdAt = data.createdAt;
+      if (createdAt && createdAt.toDate) {
+        const d = createdAt.toDate();
         const createdEl = document.createElement("span");
-        createdEl.textContent = "Added " + created;
+        createdEl.textContent = "Added " + d.toLocaleString(undefined, {
+          month: "short",
+          day: "numeric",
+          hour: "2-digit",
+          minute: "2-digit"
+        });
         metaRow.appendChild(createdEl);
       }
 
@@ -759,6 +860,8 @@
 
       const hasVoted =
         currentVoterHash && uniqueVoters.has(currentVoterHash);
+      const isCompleted = voteCount >= totalVoters;
+      const needsYourVote = !!(currentVoterHash && !hasVoted && !isCompleted);
 
       if (voteCount < totalVoters) {
         statusEl.textContent =
@@ -768,16 +871,6 @@
           totalVoters +
           " in).";
         statusEl.classList.remove("pass", "fail");
-
-        const pill = document.createElement("div");
-        pill.className = "pill";
-        pill.innerHTML =
-          '<span class="pill-dot waiting"></span><span>' +
-          (hasVoted
-            ? "You’ve voted. Final result will unlock when everyone else votes."
-            : "You haven’t voted on this yet.") +
-          "</span>";
-        infoEl.appendChild(pill);
       } else {
         statusEl.textContent =
           "Final tally — YES: " + yes + ", NO: " + no + ".";
@@ -788,7 +881,34 @@
           statusEl.classList.add("fail");
           statusEl.textContent += " Rule FAILS (not unanimous).";
         }
+      }
 
+      // Apply visual state classes
+      if (isCompleted) {
+        wrapper.classList.add("completed");
+      } else if (needsYourVote) {
+        wrapper.classList.add("need-your-vote");
+      } else if (hasVoted) {
+        wrapper.classList.add("already-voted");
+      }
+
+      // Info pill / text
+      if (!currentVoterHash) {
+        infoEl.textContent =
+          "Set your secret voter code above before voting on anything.";
+      } else if (!isCompleted) {
+        const pill = document.createElement("div");
+        pill.className = "pill";
+        pill.innerHTML =
+          '<span class="pill-dot ' +
+          (needsYourVote ? "waiting" : "done") +
+          '"></span><span>' +
+          (needsYourVote
+            ? "Needs your vote."
+            : "You’ve already voted on this one.") +
+          "</span>";
+        infoEl.appendChild(pill);
+      } else {
         const pill = document.createElement("div");
         pill.className = "pill";
         pill.innerHTML =
@@ -797,12 +917,7 @@
       }
 
       const disableVoting =
-        !currentVoterHash || hasVoted || voteCount >= totalVoters;
-
-      if (!currentVoterHash) {
-        infoEl.textContent =
-          "Set your secret voter code above before voting on anything.";
-      }
+        !currentVoterHash || hasVoted || isCompleted;
 
       yesBtn.disabled = disableVoting;
       noBtn.disabled = disableVoting;
@@ -810,7 +925,50 @@
       yesBtn.addEventListener("click", () => handleVote(ruleId, "YES"));
       noBtn.addEventListener("click", () => handleVote(ruleId, "NO"));
 
-      rulesList.appendChild(wrapper);
+      return { wrapper, needsYourVote, isCompleted };
+    }
+
+    // --- load and render rules (parallel fetch) ---
+    async function loadRules() {
+      rulesList.innerHTML = "<p class='small'>Loading…</p>";
+      if (pendingSummary) pendingSummary.textContent = "";
+
+      try {
+        const rulesRef = collection(db, "rules");
+        const qRules = query(rulesRef, orderBy("createdAt", "desc"));
+        const snap = await getDocs(qRules);
+
+        if (snap.empty) {
+          rulesList.innerHTML =
+            "<p class='small'>No rules yet. Someone be brave and add the first one ✨</p>";
+          updatePendingSummary(0, 0);
+          return;
+        }
+
+        rulesList.innerHTML = "";
+
+        // Build all rule elements in parallel
+        const buildPromises = snap.docs.map((ruleDoc) =>
+          buildRuleElement(ruleDoc)
+        );
+        const results = await Promise.all(buildPromises);
+
+        let pendingCount = 0;
+        results.forEach((result) => {
+          if (!result) return;
+          const { wrapper, needsYourVote } = result;
+          if (needsYourVote) pendingCount++;
+          rulesList.appendChild(wrapper);
+        });
+
+        updatePendingSummary(pendingCount, snap.docs.length);
+        applyHideCompleted();
+      } catch (err) {
+        console.error(err);
+        rulesList.innerHTML =
+          "<p class='small danger'>Error loading rules. Check Firebase config / rules.</p>";
+        updatePendingSummary(0, 0);
+      }
     }
 
     async function handleVote(ruleId, voteValue) {
