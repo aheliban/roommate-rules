@@ -178,7 +178,7 @@
       border-radius: 999px;
     }
 
-    /* per-step color tags: blue, pink, purple */
+    /* per-step color tags */
     #voter-section h2:nth-of-type(1) .eyebrow {
       background: rgba(125, 211, 252, 0.26); /* sky blue */
       color: #0369a1;
@@ -820,49 +820,142 @@
     const massYesBtn = document.getElementById("massYesBtn");
     const massNoBtn = document.getElementById("massNoBtn");
 
+    const heroEl = document.querySelector(".hero");
+
     let currentVoterHash = null;
     let currentView = "open"; // 'open' or 'results'
     let lastProposeTime = 0;
 
-    // --- theme handling (per-device color vibe) ---
+    // --- theme handling (per-device color vibe, full-page tint) ---
+    const themeConfigs = {
+      default: {
+        accent: "#f9a8d4",
+        accentSoft: "rgba(249, 168, 212, 0.18)",
+        accentStrong: "#ec4899",
+        bg: "#fdf7ff",
+        card: "#ffffff",
+        borderSubtle: "#f3d9ff",
+        bodyBg:
+          "radial-gradient(circle at top left, rgba(125, 211, 252, 0.85) 0, transparent 55%)," +
+          "radial-gradient(circle at top right, rgba(249, 168, 212, 0.85) 0, transparent 55%)," +
+          "radial-gradient(circle at bottom left, rgba(233, 213, 255, 0.9) 0, transparent 55%)," +
+          "radial-gradient(circle at bottom right, rgba(187, 247, 208, 0.9) 0, transparent 55%)," +
+          "#fdf7ff",
+        heroBg:
+          "linear-gradient(145deg," +
+          "#fef9ff 0%," +
+          "rgba(125, 211, 252, 0.22) 25%," +
+          "rgba(233, 213, 255, 0.32) 60%," +
+          "rgba(187, 247, 208, 0.35) 100%)"
+      },
+
+      green: {
+        accent: "#22c55e",
+        accentSoft: "rgba(34, 197, 94, 0.18)",
+        accentStrong: "#16a34a",
+        bg: "#f0fdf4",
+        card: "#ffffff",
+        borderSubtle: "#bbf7d0",
+        bodyBg:
+          "radial-gradient(circle at top left, rgba(74, 222, 128, 0.55) 0, transparent 55%)," +
+          "radial-gradient(circle at top right, rgba(22, 163, 74, 0.4) 0, transparent 55%)," +
+          "radial-gradient(circle at bottom left, rgba(187, 247, 208, 0.85) 0, transparent 55%)," +
+          "radial-gradient(circle at bottom right, rgba(21, 128, 61, 0.4) 0, transparent 55%)," +
+          "#f0fdf4",
+        heroBg:
+          "linear-gradient(145deg," +
+          "#f0fdf4 0%," +
+          "rgba(74, 222, 128, 0.28) 30%," +
+          "rgba(34, 197, 94, 0.32) 100%)"
+      },
+
+      blue: {
+        accent: "#38bdf8",
+        accentSoft: "rgba(56, 189, 248, 0.20)",
+        accentStrong: "#0284c7",
+        bg: "#eff6ff",
+        card: "#ffffff",
+        borderSubtle: "#bfdbfe",
+        bodyBg:
+          "radial-gradient(circle at top left, rgba(59, 130, 246, 0.5) 0, transparent 55%)," +
+          "radial-gradient(circle at top right, rgba(56, 189, 248, 0.5) 0, transparent 55%)," +
+          "radial-gradient(circle at bottom left, rgba(125, 211, 252, 0.8) 0, transparent 55%)," +
+          "radial-gradient(circle at bottom right, rgba(37, 99, 235, 0.45) 0, transparent 55%)," +
+          "#eff6ff",
+        heroBg:
+          "linear-gradient(145deg," +
+          "#eff6ff 0%," +
+          "rgba(125, 211, 252, 0.3) 30%," +
+          "rgba(37, 99, 235, 0.35) 100%)"
+      },
+
+      pink: {
+        accent: "#f9a8d4",
+        accentSoft: "rgba(249, 168, 212, 0.25)",
+        accentStrong: "#ec4899",
+        bg: "#fff1f5",
+        card: "#fff7fb",
+        borderSubtle: "#fecdd3",
+        bodyBg:
+          "radial-gradient(circle at top left, rgba(251, 113, 133, 0.55) 0, transparent 55%)," +
+          "radial-gradient(circle at top right, rgba(244, 114, 182, 0.55) 0, transparent 55%)," +
+          "radial-gradient(circle at bottom left, rgba(252, 231, 243, 0.9) 0, transparent 55%)," +
+          "radial-gradient(circle at bottom right, rgba(219, 39, 119, 0.4) 0, transparent 55%)," +
+          "#fff1f5",
+        heroBg:
+          "linear-gradient(145deg," +
+          "#fff7fb 0%," +
+          "rgba(249, 168, 212, 0.35) 30%," +
+          "rgba(244, 114, 182, 0.4) 100%)"
+      },
+
+      purple: {
+        accent: "#a855f7",
+        accentSoft: "rgba(168, 85, 247, 0.22)",
+        accentStrong: "#7e22ce",
+        bg: "#f5f3ff",
+        card: "#faf5ff",
+        borderSubtle: "#ddd6fe",
+        bodyBg:
+          "radial-gradient(circle at top left, rgba(168, 85, 247, 0.5) 0, transparent 55%)," +
+          "radial-gradient(circle at top right, rgba(129, 140, 248, 0.5) 0, transparent 55%)," +
+          "radial-gradient(circle at bottom left, rgba(221, 214, 254, 0.9) 0, transparent 55%)," +
+          "radial-gradient(circle at bottom right, rgba(88, 28, 135, 0.45) 0, transparent 55%)," +
+          "#f5f3ff",
+        heroBg:
+          "linear-gradient(145deg," +
+          "#faf5ff 0%," +
+          "rgba(196, 181, 253, 0.35) 30%," +
+          "rgba(126, 34, 206, 0.4) 100%)"
+      }
+    };
+
     function applyTheme(choice) {
       const root = document.documentElement;
-      switch (choice) {
-        case "green":
-          root.style.setProperty("--accent", "#4ade80");
-          root.style.setProperty("--accent-soft", "rgba(74, 222, 128, 0.18)");
-          root.style.setProperty("--accent-strong", "#16a34a");
-          break;
-        case "blue":
-          root.style.setProperty("--accent", "#7dd3fc");
-          root.style.setProperty("--accent-soft", "rgba(125, 211, 252, 0.18)");
-          root.style.setProperty("--accent-strong", "#0284c7");
-          break;
-        case "pink":
-          root.style.setProperty("--accent", "#f9a8d4");
-          root.style.setProperty("--accent-soft", "rgba(249, 168, 212, 0.18)");
-          root.style.setProperty("--accent-strong", "#ec4899");
-          break;
-        case "purple":
-          root.style.setProperty("--accent", "#e9d5ff");
-          root.style.setProperty("--accent-soft", "rgba(233, 213, 255, 0.32)");
-          root.style.setProperty("--accent-strong", "#7e22ce");
-          break;
-        default:
-          // reset to CSS defaults (pink-ish)
-          root.style.removeProperty("--accent");
-          root.style.removeProperty("--accent-soft");
-          root.style.removeProperty("--accent-strong");
-          break;
+      const body = document.body;
+      const config = themeConfigs[choice] || themeConfigs.default;
+
+      root.style.setProperty("--accent", config.accent);
+      root.style.setProperty("--accent-soft", config.accentSoft);
+      root.style.setProperty("--accent-strong", config.accentStrong);
+      root.style.setProperty("--bg", config.bg);
+      root.style.setProperty("--card", config.card);
+      root.style.setProperty("--border-subtle", config.borderSubtle);
+
+      if (body) {
+        body.style.background = config.bodyBg;
+      }
+      if (heroEl) {
+        heroEl.style.background = config.heroBg;
       }
     }
 
     function initThemeFromStorage() {
-      const stored = localStorage.getItem("themeChoice");
-      if (stored && themeSelect) {
+      const stored = localStorage.getItem("themeChoice") || "default";
+      if (themeSelect) {
         themeSelect.value = stored;
-        applyTheme(stored);
       }
+      applyTheme(stored);
     }
 
     if (themeSelect) {
