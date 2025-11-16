@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Apartment Rules Voting</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 1.5rem;
+      background: #f5f5f5;
+    }
+    h1 {
+      text-align: center;
+    }
+    section {
+      background: #fff;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    }
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+    }
+    input[type="text"], textarea {
+      width: 100%;
+      padding: 0.5rem;
+      margin-bottom: 0.75rem;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      font-size: 0.95rem;
+    }
+    textarea {
+      min-height: 60px;
+      resize: vertical;
+    }
+    button {
+      cursor: pointer;
+      border: none;
+      border-radius: 4px;
+      padding: 0.4rem 0.8rem;
+      font-size: 0.9rem;
+      margin-right: 0.5rem;
+    }
+    button.primary {
+      background: #2563eb;
+      color: white;
+    }
+    button.secondary {
+      background: #e5e7eb;
+      color: #111827;
+    }
+    button:disabled {
+      opacity: 0.5;
+      cursor: default;
+    }
+    .rule {
+      border-top: 1px solid #eee;
+      padding-top: 0.75rem;
+      margin-top: 0.75rem;
+    }
+    .rule:first-child {
+      border-top: none;
+      margin-top: 0;
+      padding-top: 0;
+    }
+    .rule-text {
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+    .meta {
+      font-size: 0.8rem;
+      color: #6b7280;
+      margin-bottom: 0.25rem;
+    }
+    .status {
+      font-size: 0.85rem;
+      margin: 0.25rem 0;
+    }
+    .status.pass {
+      color: #15803d;
+      font-weight: 600;
+    }
+    .status.fail {
+      color: #b91c1c;
+      font-weight: 600;
+    }
+    .small {
+      font-size: 0.8rem;
+      color: #6b7280;
+    }
+    .danger {
+      color: #b91c1c;
+    }
+  </style>
+</head>
+<body>
+  <h1>Apartment Rules Voting</h1>
+
+  <section id="voter-section">
+    <h2>Your voter code</h2>
+    <p class="small">
+      Each roommate has a secret code. Enter yours once per device. Nobody else will see it;
+      only a hash is stored.
+    </p>
+    <label for="voterCodeInput">Secret voter code</label>
+    <input type="text" id="voterCodeInput" placeholder="your-secret-phrase" />
+    <button class="primary" id="setCodeBtn">Set code</button>
+    <p id="voterStatus" class="small"></p>
+  </section>
+
+  <section id="propose-section">
+    <h2>Propose a new rule</h2>
+    <p class="small">Rules must be general, not targeting a specific person by name.</p>
+    <label for="ruleText">Rule text</label>
+    <textarea id="ruleText" placeholder="No loud music after 11pm."></textarea>
+    <button class="primary" id="proposeBtn">Submit rule</button>
+    <p id="proposeStatus" class="small"></p>
+  </section>
+
+  <section id="rules-section">
+    <h2>Open rules</h2>
+    <p class="small">
+      These are all rules currently in the system. Each roommate can vote once per rule.
+      Results only show after all 4 votes are in.
+    </p>
+    <div id="rulesContainer">
+      <p class="small">Loading rules…</p>
+    </div>
+  </section>
+
+  <!-- Firebase via CDN, using modular SDK -->
+  <script type="module">
+    // Import Firebase modules from CDN (version number may change over time)
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+    import {
+      getFirestore,
+      collection,
+      addDoc,
+      doc,
+      setDoc,
+      getDocs,
+      serverTimestamp,
+      query,
+      orderBy
+    } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+
+    // 1) FILL THIS IN from your Firebase console (Project settings -> Web app config)
+    const firebaseConfig = {
+      apiKey: "AIzaSyAGgZCLDYuVuH2lGZtuOzw8zgmJeLDsUHI",
+      authDomain: "apt-rules--polling.firebaseapp.com",
+      projectId: "apt-rules--polling",
+      storageBucket: "apt-rules--polling.firebasestorage.app",
+      messagingSenderId: "969696072614",
+      appId: "1:969696072614:web:08eae8b668499a80e3f567",
+      measurementId: "G-PCE37BPYND"
+    };
+
+
+    // 2) FILL THIS IN after you generate hashes for the 4 secret codes.
+    //    These should be 64-character hex strings.
+    const ALLOWED_VOTER_HASHES = [
+      "HASH_FOR_ROOMMATE_1",
+      "HASH_FOR_ROOMMATE_2",
+      "HASH_FOR_ROOMMATE_3",
+      "HASH_FOR_ROOMMATE_4"
+    ];
+
+    // ---- basic setup ----
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const voterInput = document.getElementById("voterCodeInput");
+    const setCodeBtn = document.getElementById("setCodeBtn");
+    const voterStatus = document.getElementById("voterStatus");
+
+    const ruleTextInput = document.getElementById("ruleText");
+    const proposeBtn = document.getElementById("proposeBtn");
+    const proposeStatus = document.getElementById("proposeStatus");
+
+    const rulesContainer = document.getElementById("rulesContainer");
+
+    let currentVoterHash = null;
+
+    // ---- utility: hash function for codes (SHA-256 -> hex) ----
+    async function hashCodeToHex(code) {
+      const enc = new TextEncoder();
+      const data = enc.encode(code);
+      const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      return hashArray.map(b => b.toString(16).padStart(2, "0")).join("");
+    }
+
+    function shortHash(hash) {
+      return hash ? hash.substring(0, 8) + "…" : "";
+    }
+
+    // Load voter hash from localStorage if present
+    async function initVoterFromStorage() {
+      const stored = localStorage.getItem("voterHash");
+      if (stored && ALLOWED_VOTER_HASHES.includes(stored)) {
+        currentVoterHash = stored;
+        voterStatus.textContent = "Voter code set (hash " + shortHash(stored) + ")";
+        voterStatus.classList.remove("danger");
+      } else if (stored) {
+        // invalid / outdated
+        localStorage.removeItem("voterHash");
+      }
+    }
+
+    setCodeBtn.addEventListener("click", async () => {
+      const code = voterInput.value.trim();
+      if (!code) {
+        voterStatus.textContent = "Enter a non-empty code.";
+        voterStatus.classList.add("danger");
+        return;
+      }
+      const hash = await hashCodeToHex(code);
+      if (!ALLOWED_VOTER_HASHES.includes(hash)) {
+        voterStatus.textContent = "This code is not one of the 4 registered voter codes.";
+        voterStatus.classList.add("danger");
+        currentVoterHash = null;
+        localStorage.removeItem("voterHash");
+        return;
+      }
+      currentVoterHash = hash;
+      localStorage.setItem("voterHash", hash);
+      voterStatus.textContent = "Voter code set (hash " + shortHash(hash) + ")";
+      voterStatus.classList.remove("danger");
+      voterInput.value = "";
+      // reload rule status to show if you've voted
+      loadRules();
+    });
+
+    // ---- propose rule ----
+    proposeBtn.addEventListener("click", async () => {
+      const text = ruleTextInput.value.trim();
+      if (!text) {
+        proposeStatus.textContent = "Rule text can’t be empty.";
+        proposeStatus.classList.add("danger");
+        return;
+      }
+      proposeBtn.disabled = true;
+      proposeStatus.textContent = "Submitting…";
+      proposeStatus.classList.remove("danger");
+
+      try {
+        await addDoc(collection(db, "rules"), {
+          text,
+          createdAt: serverTimestamp()
+        });
+        proposeStatus.textContent = "Rule submitted.";
+        ruleTextInput.value = "";
+        loadRules();
+      } catch (err) {
+        console.error(err);
+        proposeStatus.textContent = "Error submitting rule.";
+        proposeStatus.classList.add("danger");
+      } finally {
+        proposeBtn.disabled = false;
+      }
+    });
+
+    // ---- load and render rules ----
+    async function loadRules() {
+      rulesContainer.innerHTML = "<p class='small'>Loading…</p>";
+      try {
+        const rulesRef = collection(db, "rules");
+        const qRules = query(rulesRef, orderBy("createdAt", "desc"));
+        const snap = await getDocs(qRules);
+
+        if (snap.empty) {
+          rulesContainer.innerHTML = "<p class='small'>No rules yet.</p>";
+          return;
+        }
+
+        rulesContainer.innerHTML = "";
+        for (const ruleDoc of snap.docs) {
+          await renderRule(ruleDoc);
+        }
+      } catch (err) {
+        console.error(err);
+        rulesContainer.innerHTML = "<p class='small danger'>Error loading rules.</p>";
+      }
+    }
+
+    async function renderRule(ruleDoc) {
+      const data = ruleDoc.data();
+      const ruleId = ruleDoc.id;
+
+      // fetch votes for this rule
+      const votesRef = collection(db, "rules", ruleId, "votes");
+      const votesSnap = await getDocs(votesRef);
+
+      const votes = votesSnap.docs.map(d => d.data());
+      const uniqueVoters = new Set(votes.map(v => v.voterHash));
+      const voteCount = uniqueVoters.size;
+      const totalVoters = ALLOWED_VOTER_HASHES.length;
+
+      let yes = 0;
+      let no = 0;
+      votes.forEach(v => {
+        if (v.vote === "YES") yes++;
+        else if (v.vote === "NO") no++;
+      });
+
+      const wrapper = document.createElement("div");
+      wrapper.className = "rule";
+
+      const textEl = document.createElement("div");
+      textEl.className = "rule-text";
+      textEl.textContent = data.text || "(no text)";
+      wrapper.appendChild(textEl);
+
+      const metaEl = document.createElement("div");
+      metaEl.className = "meta";
+      metaEl.textContent = "Rule ID: " + ruleId;
+      wrapper.appendChild(metaEl);
+
+      const statusEl = document.createElement("div");
+      statusEl.className = "status";
+      wrapper.appendChild(statusEl);
+
+      const buttonsEl = document.createElement("div");
+
+      const yesBtn = document.createElement("button");
+      yesBtn.textContent = "YES";
+      yesBtn.className = "primary";
+
+      const noBtn = document.createElement("button");
+      noBtn.textContent = "NO";
+      noBtn.className = "secondary";
+
+      buttonsEl.appendChild(yesBtn);
+      buttonsEl.appendChild(noBtn);
+      wrapper.appendChild(buttonsEl);
+
+      const infoEl = document.createElement("div");
+      infoEl.className = "small";
+      wrapper.appendChild(infoEl);
+
+      // figure out if current voter has voted
+      let hasVoted = false;
+      if (currentVoterHash && votes.some(v => v.voterHash === currentVoterHash)) {
+        hasVoted = true;
+      }
+
+      // UI logic: if not all votes are in, only show "X/4 votes submitted".
+      // Once all votes are in, show YES/NO counts and pass/fail.
+      if (voteCount < totalVoters) {
+        statusEl.textContent = `Votes submitted: ${voteCount} / ${totalVoters}`;
+        statusEl.classList.remove("pass", "fail");
+        infoEl.textContent = hasVoted
+          ? "You have already voted on this rule. Results will show when everyone has voted."
+          : "You haven’t voted yet. You’ll see results after all votes are in.";
+      } else {
+        statusEl.textContent = `Final tally — YES: ${yes}, NO: ${no}`;
+        if (yes === totalVoters) {
+          statusEl.classList.add("pass");
+          statusEl.textContent += " → Rule PASSES (unanimous).";
+        } else {
+          statusEl.classList.add("fail");
+          statusEl.textContent += " → Rule FAILS (not unanimous).";
+        }
+        infoEl.textContent = "Voting is complete. You cannot change votes.";
+      }
+
+      // Disable buttons if:
+      // - No voter code set
+      // - Already voted
+      // - All votes are in (closed)
+      const disableVoting =
+        !currentVoterHash || hasVoted || voteCount >= totalVoters;
+
+      if (!currentVoterHash) {
+        infoEl.textContent = "Set your voter code above before voting.";
+      }
+
+      yesBtn.disabled = disableVoting;
+      noBtn.disabled = disableVoting;
+
+      yesBtn.addEventListener("click", () => handleVote(ruleId, "YES"));
+      noBtn.addEventListener("click", () => handleVote(ruleId, "NO"));
+
+      rulesContainer.appendChild(wrapper);
+    }
+
+    // ---- voting ----
+    async function handleVote(ruleId, voteValue) {
+      if (!currentVoterHash) {
+        alert("Set your voter code first.");
+        return;
+      }
+      if (!ALLOWED_VOTER_HASHES.includes(currentVoterHash)) {
+        alert("Your voter code is not registered.");
+        return;
+      }
+
+      try {
+        const voteDocRef = doc(db, "rules", ruleId, "votes", currentVoterHash);
+
+        // We could check if doc exists to prevent changes, but for 4 roommates
+        // this front-end check + social agreement is usually enough.
+        await setDoc(voteDocRef, {
+          voterHash: currentVoterHash,
+          vote: voteValue
+        });
+
+        loadRules();
+      } catch (err) {
+        console.error(err);
+        alert("Error submitting vote.");
+      }
+    }
+
+    // ---- startup ----
+    (async () => {
+      await initVoterFromStorage();
+      await loadRules();
+    })();
+
+    // ---- helper for YOU (the dev) to generate hashes once ----
+    // Open browser devtools on this page and run:
+    //   hashCodeToHex("your-secret-code-here").then(console.log)
+    // Take the printed hex string and paste it into ALLOWED_VOTER_HASHES above.
+  </script>
+</body>
+</html>
+
