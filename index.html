@@ -507,17 +507,17 @@
       orderBy
     } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
 
-    // TODO: paste your actual Firebase config here (the one you already used)
     const firebaseConfig = {
-      apiKey: "YOUR_API_KEY_HERE",
-      authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-      projectId: "YOUR_PROJECT_ID",
-      storageBucket: "YOUR_PROJECT_ID.appspot.com",
-      messagingSenderId: "YOUR_SENDER_ID",
-      appId: "YOUR_APP_ID"
-    };
+      apiKey: "AIzaSyAGgZCLDYuVuH2lGZtuOzw8zgmJeLDsUHI",
+      authDomain: "apt-rules--polling.firebaseapp.com",
+      projectId: "apt-rules--polling",
+      storageBucket: "apt-rules--polling.firebasestorage.app",
+      messagingSenderId: "969696072614",
+      appId: "1:969696072614:web:08eae8b668499a80e3f567",
+      measurementId: "G-PCE37BPYND"
+    };
 
-    // 4 roommates, 4 votes required before results show
+    // 4 roommates, so 4 votes required before results show
     const TOTAL_VOTERS = 4;
 
     const app = initializeApp(firebaseConfig);
