@@ -208,14 +208,7 @@
         voterStatus.classList.add("danger");
         return;
       }
-      const hash = await hashCodeToHex(code);
-      if (!ALLOWED_VOTER_HASHES.includes(hash)) {
-        voterStatus.textContent = "This code is not one of the 4 registered voter codes.";
-        voterStatus.classList.add("danger");
-        currentVoterHash = null;
-        localStorage.removeItem("voterHash");
-        return;
-      }
+      const hash = await hashCodeToHex(code);
       currentVoterHash = hash;
       localStorage.setItem("voterHash", hash);
       voterStatus.textContent = "Voter code set (hash " + shortHash(hash) + ")";
@@ -288,7 +281,7 @@
       const votes = votesSnap.docs.map(d => d.data());
       const uniqueVoters = new Set(votes.map(v => v.voterHash));
       const voteCount = uniqueVoters.size;
-      const totalVoters = ALLOWED_VOTER_HASHES.length;
+      const totalVoters = TOTAL_VOTERS;
 
       let yes = 0;
       let no = 0;
