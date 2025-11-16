@@ -1,513 +1,513 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Camel and Rain Tea – Apartment Rules Voting</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <style>
-    :root {
-      --bg: #020617;
-      --bg-soft: #020617;
-      --card: #020617;
-      --card-soft: #020617;
-      --accent: #38bdf8;
-      --accent-soft: rgba(56, 189, 248, 0.1);
-      --accent-strong: #0ea5e9;
-      --danger: #f97373;
-      --success: #4ade80;
-      --border-subtle: #1f2937;
-      --text-main: #e5e7eb;
-      --text-muted: #9ca3af;
-      --text-soft: #6b7280;
-      --chip-bg: #111827;
-    }
+  <meta charset="UTF-8" />
+  <title>Camel and Rain Tea – Apartment Rules Voting</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    * {
-      box-sizing: border-box;
-    }
+  <!-- Cute rounded font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
 
-    body {
-      margin: 0;
-      min-height: 100vh;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-        sans-serif;
-      background:
-        radial-gradient(circle at top left, #38bdf8 0, transparent 55%),
-        radial-gradient(circle at bottom right, #22c55e 0, transparent 55%),
-        #020617;
-      color: var(--text-main);
-      -webkit-font-smoothing: antialiased;
-    }
+  <style>
+    :root {
+      --bg: #fff7fb;
+      --bg-soft: #fef2ff;
+      --card: #ffffff;
+      --card-soft: #fdf4ff;
+      --accent: #f9a8d4;            /* baby pink */
+      --accent-soft: rgba(249, 168, 212, 0.18);
+      --accent-strong: #ec4899;
+      --danger: #f97373;
+      --success: #22c55e;
+      --border-subtle: #f3d9ff;
+      --text-main: #312e81;        /* deep indigo */
+      --text-muted: #6b7280;
+      --text-soft: #9ca3af;
+      --chip-bg: #f9fafb;
+    }
 
-    .app {
-      max-width: 960px;
-      margin: 0 auto;
-      padding: 1.5rem 1.25rem 3rem;
-    }
+    * {
+      box-sizing: border-box;
+    }
 
-    .hero {
-      background: rgba(15, 23, 42, 0.9);
-      border-radius: 18px;
-      padding: 1.5rem 1.5rem 1.25rem;
-      border: 1px solid rgba(148, 163, 184, 0.35);
-      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.7);
-      backdrop-filter: blur(18px);
-      margin-bottom: 1.75rem;
-      position: relative;
-      overflow: hidden;
-    }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Quicksand", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top left, #fde68a 0, transparent 55%),
+        radial-gradient(circle at top right, #bfdbfe 0, transparent 55%),
+        radial-gradient(circle at bottom, #f9a8d4 0, transparent 55%),
+        var(--bg);
+      color: var(--text-main);
+      -webkit-font-smoothing: antialiased;
+    }
 
-    .hero::before {
-      content: "🐫";
-      position: absolute;
-      right: 1.5rem;
-      top: 0.9rem;
-      font-size: 1.7rem;
-      opacity: 0.9;
-    }
+    .app {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 2.25rem 1.5rem 3.25rem;
+    }
 
-    .hero::after {
-      content: "☔️🍵";
-      position: absolute;
-      right: 1.25rem;
-      bottom: 0.9rem;
-      font-size: 1.1rem;
-      opacity: 0.7;
-    }
+    .hero {
+      position: relative;
+      background: linear-gradient(145deg, #fef9ff, #e0f2fe);
+      border-radius: 24px;
+      padding: 1.8rem 1.8rem 1.6rem;
+      border: 1px solid rgba(251, 207, 232, 0.9);
+      box-shadow:
+        0 18px 40px rgba(148, 163, 184, 0.25),
+        0 0 0 1px rgba(255, 255, 255, 0.8);
+      margin-bottom: 2rem;
+      overflow: hidden;
+    }
 
-    .hero-title {
-      font-size: clamp(1.5rem, 3vw, 1.9rem);
-      font-weight: 700;
-      letter-spacing: 0.03em;
-      margin: 0 0 0.25rem;
-    }
+    /* Little kawaii doodles in the corners */
+    .hero::before {
+      content: "🐫✨";
+      position: absolute;
+      right: 1.7rem;
+      top: 1.1rem;
+      font-size: 1.7rem;
+      opacity: 0.9;
+    }
 
-    .hero-subtitle {
-      margin: 0;
-      font-size: 0.9rem;
-      color: var(--text-muted);
-    }
+    .hero::after {
+      content: "☔️🍵";
+      position: absolute;
+      left: 1.6rem;
+      bottom: 1rem;
+      font-size: 1.3rem;
+      opacity: 0.8;
+    }
 
-    .hero-tagline {
-      margin-top: 0.8rem;
-      font-size: 0.85rem;
-      color: var(--text-soft);
-    }
+    .hero-title {
+      font-size: clamp(1.9rem, 3.4vw, 2.2rem);
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      margin: 0 0 0.15rem;
+    }
 
-    .badge-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      margin-top: 1rem;
-    }
+    .hero-subtitle {
+      margin: 0.15rem 0 0.3rem;
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
 
-    .badge {
-      font-size: 0.74rem;
-      text-transform: uppercase;
-      letter-spacing: 0.09em;
-      padding: 0.25rem 0.6rem;
-      border-radius: 9999px;
-      border: 1px solid rgba(148, 163, 184, 0.4);
-      background: rgba(15, 23, 42, 0.7);
-      display: inline-flex;
-      align-items: center;
-      gap: 0.3rem;
-      color: var(--text-muted);
-      white-space: nowrap;
-    }
+    .hero-tagline {
+      margin-top: 0.6rem;
+      font-size: 0.9rem;
+      color: var(--text-main);
+      background: rgba(255, 255, 255, 0.75);
+      padding: 0.5rem 0.75rem;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
 
-    .badge-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 999px;
-      background: var(--accent);
-    }
+    .hero-tagline::before {
+      content: "★";
+      color: var(--accent-strong);
+      font-size: 0.9rem;
+    }
 
-    .badge-unanimous {
-      border-color: rgba(74, 222, 128, 0.6);
-    }
+    .grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.9fr);
+      gap: 1.4rem;
+    }
 
-    .badge-anon {
-      border-color: rgba(129, 140, 248, 0.6);
-    }
+    @media (max-width: 800px) {
+      .grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
 
-    .grid {
-      display: grid;
-      grid-template-columns: minmax(0, 1.15fr) minmax(0, 1.85fr);
-      gap: 1.25rem;
-    }
+      .hero {
+        padding: 1.5rem 1.3rem 1.4rem;
+      }
 
-    @media (max-width: 800px) {
-      .grid {
-        grid-template-columns: minmax(0, 1fr);
-      }
-    }
+      .hero::after {
+        display: none; /* less clutter on mobile */
+      }
+    }
 
-    section {
-      background: rgba(15, 23, 42, 0.96);
-      border-radius: 16px;
-      padding: 1.15rem 1.15rem 1.25rem;
-      border: 1px solid var(--border-subtle);
-      box-shadow: 0 14px 35px rgba(15, 23, 42, 0.7);
-    }
+    section {
+      background: var(--card);
+      border-radius: 18px;
+      padding: 1.25rem 1.25rem 1.4rem;
+      border: 1px solid var(--border-subtle);
+      box-shadow: 0 12px 30px rgba(148, 163, 184, 0.2);
+    }
 
-    section + section {
-      margin-top: 0;
-    }
+    h2 {
+      font-size: 1rem;
+      margin: 0 0 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
 
-    h2 {
-      font-size: 1rem;
-      margin: 0 0 0.5rem;
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-    }
+    h2 span.eyebrow {
+      font-size: 0.8rem;
+      color: var(--accent-strong);
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      font-weight: 700;
+      padding: 0.15rem 0.55rem;
+      background: var(--accent-soft);
+      border-radius: 999px;
+    }
 
-    h2 span.eyebrow {
-      font-size: 0.85rem;
-      color: var(--accent-strong);
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      font-weight: 600;
-    }
+    .section-desc {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 0.85rem;
+      line-height: 1.4;
+    }
 
-    .section-desc {
-      font-size: 0.82rem;
-      color: var(--text-soft);
-      margin-bottom: 0.75rem;
-    }
+    label {
+      display: block;
+      margin-bottom: 0.3rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-main);
+    }
 
-    label {
-      display: block;
-      margin-bottom: 0.3rem;
-      font-size: 0.82rem;
-      font-weight: 500;
-      color: var(--text-muted);
-    }
+    input[type="text"],
+    textarea {
+      width: 100%;
+      padding: 0.6rem 0.7rem;
+      margin-bottom: 0.7rem;
+      border-radius: 12px;
+      border: 1px solid #e5e7eb;
+      background: #fdfcff;
+      color: var(--text-main);
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease,
+        background 0.15s ease, transform 0.08s ease;
+    }
 
-    input[type="text"],
-    textarea {
-      width: 100%;
-      padding: 0.55rem 0.65rem;
-      margin-bottom: 0.6rem;
-      border-radius: 10px;
-      border: 1px solid #1f2937;
-      background: #020617;
-      color: var(--text-main);
-      font-size: 0.9rem;
-      outline: none;
-      transition: border-color 0.15s ease, box-shadow 0.15s ease,
-        background 0.15s ease;
-    }
+    input[type="text"]::placeholder,
+    textarea::placeholder {
+      color: #c4c4d0;
+    }
 
-    input[type="text"]::placeholder,
-    textarea::placeholder {
-      color: #4b5563;
-    }
+    input[type="text"]:focus,
+    textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px var(--accent-soft);
+      background: #ffffff;
+      transform: translateY(-1px);
+    }
 
-    input[type="text"]:focus,
-    textarea:focus {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.45);
-      background: #020617;
-    }
+    textarea {
+      min-height: 80px;
+      resize: vertical;
+    }
 
-    textarea {
-      min-height: 70px;
-      resize: vertical;
-    }
+    .btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      align-items: center;
+    }
 
-    .btn-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      align-items: center;
-    }
+    button {
+      cursor: pointer;
+      border: none;
+      border-radius: 999px;
+      padding: 0.48rem 1rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      transition: transform 0.08s ease, box-shadow 0.08s ease,
+        background 0.15s ease, color 0.15s ease;
+      white-space: nowrap;
+    }
 
-    button {
-      cursor: pointer;
-      border: none;
-      border-radius: 999px;
-      padding: 0.45rem 0.9rem;
-      font-size: 0.85rem;
-      font-weight: 500;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      transition: transform 0.06s ease, box-shadow 0.06s ease,
-        background 0.15s ease, color 0.15s ease;
-      white-space: nowrap;
-    }
+    button.primary {
+      background: linear-gradient(135deg, #f9a8d4, #fb7185);
+      color: #3b0764;
+      box-shadow: 0 10px 22px rgba(248, 113, 113, 0.45);
+    }
 
-    button.primary {
-      background: linear-gradient(135deg, #38bdf8, #0ea5e9);
-      color: #0b1120;
-      box-shadow: 0 8px 20px rgba(56, 189, 248, 0.5);
-    }
+    button.primary::after {
+      content: "♡";
+      font-size: 0.8rem;
+    }
 
-    button.primary:hover:not(:disabled) {
-      transform: translateY(-1px);
-      box-shadow: 0 12px 28px rgba(56, 189, 248, 0.6);
-    }
+    button.primary:hover:not(:disabled) {
+      transform: translateY(-1.5px);
+      box-shadow: 0 14px 28px rgba(248, 113, 113, 0.6);
+    }
 
-    button.secondary {
-      background: rgba(15, 23, 42, 0.95);
-      color: var(--text-main);
-      border: 1px solid #1f2937;
-    }
+    button.secondary {
+      background: #f9fafb;
+      color: var(--text-main);
+      border: 1px solid #e5e7eb;
+    }
 
-    button.secondary:hover:not(:disabled) {
-      background: #020617;
-      border-color: #374151;
-    }
+    button.secondary:hover:not(:disabled) {
+      background: #ffffff;
+      border-color: #d4d4dd;
+      transform: translateY(-1px);
+      box-shadow: 0 8px 18px rgba(148, 163, 184, 0.3);
+    }
 
-    button:disabled {
-      opacity: 0.55;
-      cursor: default;
-      transform: none;
-      box-shadow: none;
-    }
+    button:disabled {
+      opacity: 0.6;
+      cursor: default;
+      transform: none;
+      box-shadow: none;
+    }
 
-    .small {
-      font-size: 0.8rem;
-      color: var(--text-soft);
-      margin-top: 0.25rem;
-    }
+    .small {
+      font-size: 0.8rem;
+      color: var(--text-soft);
+      margin-top: 0.35rem;
+    }
 
-    .danger {
-      color: var(--danger);
-    }
+    .danger {
+      color: var(--danger);
+    }
 
-    .success {
-      color: var(--success);
-    }
+    .success {
+      color: var(--success);
+    }
 
-    #rules-section {
-      max-height: 560px;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-    }
+    #rules-section {
+      max-height: 560px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
 
-    #rules-list {
-      margin-top: 0.3rem;
-      padding-top: 0.4rem;
-      border-top: 1px solid #1f2937;
-      overflow-y: auto;
-      scrollbar-width: thin;
-      scrollbar-color: #4b5563 #020617;
-    }
+    #rules-list {
+      margin-top: 0.4rem;
+      padding-top: 0.5rem;
+      border-top: 1px dashed #e5e7eb;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: #c4c4d0 #ffffff;
+    }
 
-    #rules-list::-webkit-scrollbar {
-      width: 6px;
-    }
+    #rules-list::-webkit-scrollbar {
+      width: 6px;
+    }
 
-    #rules-list::-webkit-scrollbar-track {
-      background: #020617;
-    }
+    #rules-list::-webkit-scrollbar-track {
+      background: #ffffff;
+    }
 
-    #rules-list::-webkit-scrollbar-thumb {
-      background: #4b5563;
-      border-radius: 999px;
-    }
+    #rules-list::-webkit-scrollbar-thumb {
+      background: #c4c4d0;
+      border-radius: 999px;
+    }
 
-    .rule {
-      padding: 0.7rem 0.25rem;
-      border-bottom: 1px solid #111827;
-    }
+    .rule {
+      padding: 0.75rem 0.25rem;
+      border-bottom: 1px dashed #e5e7eb;
+    }
 
-    .rule:last-child {
-      border-bottom: none;
-    }
+    .rule:last-child {
+      border-bottom: none;
+    }
 
-    .rule-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 0.5rem;
-      margin-bottom: 0.15rem;
-    }
+    .rule-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 0.5rem;
+      margin-bottom: 0.2rem;
+    }
 
-    .rule-text {
-      font-weight: 600;
-      font-size: 0.9rem;
-    }
+    .rule-text {
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--text-main);
+    }
 
-    .rule-chip {
-      background: var(--chip-bg);
-      border-radius: 999px;
-      padding: 0.15rem 0.55rem;
-      font-size: 0.7rem;
-      color: var(--text-muted);
-      border: 1px solid #1f2937;
-      white-space: nowrap;
-    }
+    .rule-chip {
+      background: #fef9ff;
+      border-radius: 999px;
+      padding: 0.2rem 0.6rem;
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      border: 1px solid #f3d9ff;
+      white-space: nowrap;
+    }
 
-    .meta-row {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 0.4rem;
-      margin: 0.1rem 0 0.35rem;
-      font-size: 0.7rem;
-      color: var(--text-soft);
-    }
+    .meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.4rem;
+      margin: 0.15rem 0 0.4rem;
+      font-size: 0.75rem;
+      color: var(--text-soft);
+    }
 
-    .status {
-      font-size: 0.82rem;
-      margin: 0.2rem 0;
-    }
+    .status {
+      font-size: 0.82rem;
+      margin: 0.2rem 0;
+    }
 
-    .status.pass {
-      color: var(--success);
-      font-weight: 600;
-    }
+    .status.pass {
+      color: var(--success);
+      font-weight: 700;
+    }
 
-    .status.fail {
-      color: var(--danger);
-      font-weight: 600;
-    }
+    .status.fail {
+      color: var(--danger);
+      font-weight: 700;
+    }
 
-    .vote-buttons {
-      display: flex;
-      gap: 0.45rem;
-      margin-top: 0.25rem;
-      margin-bottom: 0.15rem;
-    }
+    .vote-buttons {
+      display: flex;
+      gap: 0.45rem;
+      margin-top: 0.25rem;
+      margin-bottom: 0.2rem;
+    }
 
-    .pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.35rem;
-      font-size: 0.78rem;
-      color: var(--text-soft);
-    }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.78rem;
+      color: var(--text-soft);
+      background: #f9fafb;
+      padding: 0.3rem 0.6rem;
+      border-radius: 999px;
+    }
 
-    .pill-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 999px;
-    }
+    .pill-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+    }
 
-    .pill-dot.waiting {
-      background: var(--accent);
-    }
+    .pill-dot.waiting {
+      background: var(--accent-strong);
+    }
 
-    .pill-dot.done {
-      background: var(--success);
-    }
+    .pill-dot.done {
+      background: var(--success);
+    }
 
-    footer {
-      margin-top: 1.75rem;
-      text-align: center;
-      font-size: 0.72rem;
-      color: var(--text-soft);
-      opacity: 0.75;
-    }
-  </style>
+    footer {
+      margin-top: 2rem;
+      text-align: center;
+      font-size: 0.75rem;
+      color: var(--text-soft);
+      opacity: 0.85;
+    }
+
+    footer span.logo {
+      font-weight: 600;
+      color: var(--accent-strong);
+    }
+  </style>
 </head>
 <body>
-  <div class="app">
-    <header class="hero">
-      <p class="hero-subtitle">wifi: camelandraintea</p>
-      <h1 class="hero-title">Camel and Rain Tea</h1>
-      <p class="hero-subtitle">Apartment Rules Voting</p>
-      <p class="hero-tagline">
-        Anonymous proposals. Anonymous votes. A rule only passes if all four of you say yes.
-      </p>
-      <div class="badge-row">
-        <div class="badge badge-unanimous">
-          <span class="badge-dot"></span>
-          <span>Unanimous only</span>
-        </div>
-        <div class="badge badge-anon">
-          <span class="badge-dot"></span>
-          <span>Anonymous &amp; low-drama</span>
-        </div>
-        <div class="badge">
-          <span class="badge-dot"></span>
-          <span>Results only after 4 votes</span>
-        </div>
-      </div>
-    </header>
+  <div class="app">
+    <header class="hero">
+      <!-- wifi line removed on purpose -->
 
-    <main class="grid">
-      <section id="voter-section">
-        <h2>
-          <span class="eyebrow">Step 1</span> Set your secret voter code
-        </h2>
-        <p class="section-desc">
-          Each roommate picks a private code (only you know yours). This stays on your device and
-          is stored as a hash. No names, no emails, no linking votes to people.
-        </p>
-        <label for="voterCodeInput">Secret voter code</label>
-        <input
-          type="text"
-          id="voterCodeInput"
-          placeholder="something only you will remember"
-        />
-        <div class="btn-row">
-          <button class="primary" id="setCodeBtn">
-            <span>Set code</span>
-          </button>
-        </div>
-        <p id="voterStatus" class="small"></p>
+      <h1 class="hero-title">Camel and Rain Tea</h1>
+      <p class="hero-subtitle">Apartment Rules Voting</p>
+      <p class="hero-tagline">
+        Anonymous proposals & votes – a rule only passes if all four roommates say yes.
+      </p>
 
-        <hr style="border: 0; border-top: 1px solid #1f2937; margin: 1rem 0 0.75rem;" />
+      <!-- badge row removed per your request -->
+    </header>
 
-        <h2>
-          <span class="eyebrow">Step 2</span> Add a rule
-        </h2>
-        <p class="section-desc">
-          Anyone can propose a rule. Keep it general (no names, no targeting specific people).
-        </p>
-        <label for="ruleText">Rule text</label>
-        <textarea id="ruleText" placeholder="No loud music after 11pm."></textarea>
-        <div class="btn-row">
-          <button class="primary" id="proposeBtn">
-            <span>Submit rule</span>
-          </button>
-        </div>
-        <p id="proposeStatus" class="small"></p>
-      </section>
+    <main class="grid">
+      <section id="voter-section">
+        <h2>
+          <span class="eyebrow">Step 1</span> Set your secret voter code
+        </h2>
+        <p class="section-desc">
+          Each roommate picks a private code (only you know yours). Your code is stored
+          locally on your device as a hash – no names, no emails, no way to link votes to people.
+        </p>
+        <label for="voterCodeInput">Secret voter code</label>
+        <input
+          type="text"
+          id="voterCodeInput"
+          placeholder="something only you will remember"
+        />
+        <div class="btn-row">
+          <button class="primary" id="setCodeBtn">
+            <span>Set code</span>
+          </button>
+        </div>
+        <p id="voterStatus" class="small"></p>
 
-      <section id="rules-section">
-        <h2>
-          <span class="eyebrow">Step 3</span> Vote on open rules
-        </h2>
-        <p class="section-desc">
-          Once a week, everyone opens this page, sets their code, and votes
-          <strong>YES</strong> or <strong>NO</strong> on each rule. When all four
-          votes are in, the final tally appears. Unanimous yes = the rule is adopted.
-        </p>
+        <hr style="border: 0; border-top: 1px dashed #f3d9ff; margin: 1.1rem 0 0.85rem;" />
 
-        <div id="rules-list">
-          <p class="small">Loading rules…</p>
-        </div>
-      </section>
-    </main>
+        <h2>
+          <span class="eyebrow">Step 2</span> Add a rule
+        </h2>
+        <p class="section-desc">
+          Anyone can propose a rule. Keep it general and kind (no names, no calling people out).
+        </p>
+        <label for="ruleText">Rule text</label>
+        <textarea id="ruleText" placeholder="No loud music after 11pm."></textarea>
+        <div class="btn-row">
+          <button class="primary" id="proposeBtn">
+            <span>Submit rule</span>
+          </button>
+        </div>
+        <p id="proposeStatus" class="small"></p>
+      </section>
 
-    <footer>
-      Camel and Rain Tea &middot; Anonymous roommate constitution engine
-    </footer>
-  </div>
+      <section id="rules-section">
+        <h2>
+          <span class="eyebrow">Step 3</span> Vote on open rules
+        </h2>
+        <p class="section-desc">
+          Once a week, everyone opens this page, sets their code, and votes
+          <strong>YES</strong> or <strong>NO</strong> on each rule. When all four votes are in,
+          the final tally appears. Unanimous yes = the rule is adopted.
+        </p>
 
-  <!-- Firebase + app logic -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
-    import {
-      getFirestore,
-      collection,
-      addDoc,
-      doc,
-      setDoc,
-      getDocs,
-      serverTimestamp,
-      query,
-      orderBy
-    } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+        <div id="rules-list">
+          <p class="small">Loading rules…</p>
+        </div>
+      </section>
+    </main>
 
-    const firebaseConfig = {
+    <footer>
+      <span class="logo">Camel and Rain Tea</span> · Anonymous roommate constitution engine
+    </footer>
+  </div>
+
+  <!-- Firebase + app logic (unchanged) -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+    import {
+      getFirestore,
+      collection,
+      addDoc,
+      doc,
+      setDoc,
+      getDocs,
+      serverTimestamp,
+      query,
+      orderBy
+    } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+
+    const firebaseConfig = {
       apiKey: "AIzaSyAGgZCLDYuVuH2lGZtuOzw8zgmJeLDsUHI",
       authDomain: "apt-rules--polling.firebaseapp.com",
       projectId: "apt-rules--polling",
@@ -517,300 +517,300 @@
       measurementId: "G-PCE37BPYND"
     };
 
-    // 4 roommates, so 4 votes required before results show
-    const TOTAL_VOTERS = 4;
+    // 4 roommates, so 4 votes required before results show
+    const TOTAL_VOTERS = 4;
 
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
 
-    const voterInput = document.getElementById("voterCodeInput");
-    const setCodeBtn = document.getElementById("setCodeBtn");
-    const voterStatus = document.getElementById("voterStatus");
+    const voterInput = document.getElementById("voterCodeInput");
+    const setCodeBtn = document.getElementById("setCodeBtn");
+    const voterStatus = document.getElementById("voterStatus");
 
-    const ruleTextInput = document.getElementById("ruleText");
-    const proposeBtn = document.getElementById("proposeBtn");
-    const proposeStatus = document.getElementById("proposeStatus");
+    const ruleTextInput = document.getElementById("ruleText");
+    const proposeBtn = document.getElementById("proposeBtn");
+    const proposeStatus = document.getElementById("proposeStatus");
 
-    const rulesList = document.getElementById("rules-list");
+    const rulesList = document.getElementById("rules-list");
 
-    let currentVoterHash = null;
+    let currentVoterHash = null;
 
-    // --- hashing helper ---
-    async function hashCodeToHex(code) {
-      const enc = new TextEncoder();
-      const data = enc.encode(code);
-      const hashBuffer = await crypto.subtle.digest("SHA-256", data);
-      const hashArray = Array.from(new Uint8Array(hashBuffer));
-      return hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
-    }
+    // --- hashing helper ---
+    async function hashCodeToHex(code) {
+      const enc = new TextEncoder();
+      const data = enc.encode(code);
+      const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      return hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
+    }
 
-    function shortHash(hash) {
-      return hash ? hash.substring(0, 8) + "…" : "";
-    }
+    function shortHash(hash) {
+      return hash ? hash.substring(0, 8) + "…" : "";
+    }
 
-    // restore voter hash from localStorage if present
-    async function initVoterFromStorage() {
-      const stored = localStorage.getItem("voterHash");
-      if (stored) {
-        currentVoterHash = stored;
-        voterStatus.textContent =
-          "Voter code set (hash " + shortHash(stored) + ").";
-        voterStatus.classList.remove("danger");
-        voterStatus.classList.add("success");
-      }
-    }
+    // restore voter hash from localStorage if present
+    async function initVoterFromStorage() {
+      const stored = localStorage.getItem("voterHash");
+      if (stored) {
+        currentVoterHash = stored;
+        voterStatus.textContent =
+          "Voter code set (hash " + shortHash(stored) + ").";
+        voterStatus.classList.remove("danger");
+        voterStatus.classList.add("success");
+      }
+    }
 
-    setCodeBtn.addEventListener("click", async () => {
-      const code = voterInput.value.trim();
-      if (!code) {
-        voterStatus.textContent = "Enter a non-empty code.";
-        voterStatus.classList.add("danger");
-        voterStatus.classList.remove("success");
-        return;
-      }
+    setCodeBtn.addEventListener("click", async () => {
+      const code = voterInput.value.trim();
+      if (!code) {
+        voterStatus.textContent = "Enter a non-empty code.";
+        voterStatus.classList.add("danger");
+        voterStatus.classList.remove("success");
+        return;
+      }
 
-      const hash = await hashCodeToHex(code);
-      currentVoterHash = hash;
-      localStorage.setItem("voterHash", hash);
+      const hash = await hashCodeToHex(code);
+      currentVoterHash = hash;
+      localStorage.setItem("voterHash", hash);
 
-      voterStatus.textContent =
-        "Voter code set (hash " + shortHash(hash) + "). Keep this code secret.";
-      voterStatus.classList.remove("danger");
-      voterStatus.classList.add("success");
-      voterInput.value = "";
+      voterStatus.textContent =
+        "Voter code set (hash " + shortHash(hash) + "). Keep this code secret.";
+      voterStatus.classList.remove("danger");
+      voterStatus.classList.add("success");
+      voterInput.value = "";
 
-      loadRules();
-    });
+      loadRules();
+    });
 
-    // --- propose rule ---
-    proposeBtn.addEventListener("click", async () => {
-      const text = ruleTextInput.value.trim();
-      if (!text) {
-        proposeStatus.textContent = "Rule text can’t be empty.";
-        proposeStatus.classList.add("danger");
-        proposeStatus.classList.remove("success");
-        return;
-      }
+    // --- propose rule ---
+    proposeBtn.addEventListener("click", async () => {
+      const text = ruleTextInput.value.trim();
+      if (!text) {
+        proposeStatus.textContent = "Rule text can’t be empty.";
+        proposeStatus.classList.add("danger");
+        proposeStatus.classList.remove("success");
+        return;
+      }
 
-      proposeBtn.disabled = true;
-      proposeStatus.textContent = "Submitting…";
-      proposeStatus.classList.remove("danger", "success");
+      proposeBtn.disabled = true;
+      proposeStatus.textContent = "Submitting…";
+      proposeStatus.classList.remove("danger", "success");
 
-      try {
-        await addDoc(collection(db, "rules"), {
-          text,
-          createdAt: serverTimestamp()
-        });
-        proposeStatus.textContent = "Rule submitted.";
-        proposeStatus.classList.add("success");
-        ruleTextInput.value = "";
-        loadRules();
-      } catch (err) {
-        console.error(err);
-        proposeStatus.textContent = "Error submitting rule.";
-        proposeStatus.classList.add("danger");
-      } finally {
-        proposeBtn.disabled = false;
-      }
-    });
+      try {
+        await addDoc(collection(db, "rules"), {
+          text,
+          createdAt: serverTimestamp()
+        });
+        proposeStatus.textContent = "Rule submitted.";
+        proposeStatus.classList.add("success");
+        ruleTextInput.value = "";
+        loadRules();
+      } catch (err) {
+        console.error(err);
+        proposeStatus.textContent = "Error submitting rule.";
+        proposeStatus.classList.add("danger");
+      } finally {
+        proposeBtn.disabled = false;
+      }
+    });
 
-    // --- load and render rules ---
-    async function loadRules() {
-      rulesList.innerHTML = "<p class='small'>Loading…</p>";
-      try {
-        const rulesRef = collection(db, "rules");
-        const qRules = query(rulesRef, orderBy("createdAt", "desc"));
-        const snap = await getDocs(qRules);
+    // --- load and render rules ---
+    async function loadRules() {
+      rulesList.innerHTML = "<p class='small'>Loading…</p>";
+      try {
+        const rulesRef = collection(db, "rules");
+        const qRules = query(rulesRef, orderBy("createdAt", "desc"));
+        const snap = await getDocs(qRules);
 
-        if (snap.empty) {
-          rulesList.innerHTML =
-            "<p class='small'>No rules yet. Someone be brave and add the first one.</p>";
-          return;
-        }
+        if (snap.empty) {
+          rulesList.innerHTML =
+            "<p class='small'>No rules yet. Someone be brave and add the first one ✨</p>";
+          return;
+        }
 
-        rulesList.innerHTML = "";
-        for (const ruleDoc of snap.docs) {
-          await renderRule(ruleDoc);
-        }
-      } catch (err) {
-        console.error(err);
-        rulesList.innerHTML =
-          "<p class='small danger'>Error loading rules. Check Firebase config / rules.</p>";
-      }
-    }
+        rulesList.innerHTML = "";
+        for (const ruleDoc of snap.docs) {
+          await renderRule(ruleDoc);
+        }
+      } catch (err) {
+        console.error(err);
+        rulesList.innerHTML =
+          "<p class='small danger'>Error loading rules. Check Firebase config / rules.</p>";
+      }
+    }
 
-    function formatDate(ts) {
-      if (!ts || !ts.toDate) return "";
-      const d = ts.toDate();
-      return d.toLocaleString(undefined, {
-        month: "short",
-        day: "numeric",
-        hour: "2-digit",
-        minute: "2-digit"
-      });
-    }
+    function formatDate(ts) {
+      if (!ts || !ts.toDate) return "";
+      const d = ts.toDate();
+      return d.toLocaleString(undefined, {
+        month: "short",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit"
+      });
+    }
 
-    async function renderRule(ruleDoc) {
-      const data = ruleDoc.data();
-      const ruleId = ruleDoc.id;
+    async function renderRule(ruleDoc) {
+      const data = ruleDoc.data();
+      const ruleId = ruleDoc.id;
 
-      const votesRef = collection(db, "rules", ruleId, "votes");
-      const votesSnap = await getDocs(votesRef);
-      const votes = votesSnap.docs.map((d) => d.data());
+      const votesRef = collection(db, "rules", ruleId, "votes");
+      const votesSnap = await getDocs(votesRef);
+      const votes = votesSnap.docs.map((d) => d.data());
 
-      const uniqueVoters = new Set(votes.map((v) => v.voterHash));
-      const voteCount = uniqueVoters.size;
-      const totalVoters = TOTAL_VOTERS;
+      const uniqueVoters = new Set(votes.map((v) => v.voterHash));
+      const voteCount = uniqueVoters.size;
+      const totalVoters = TOTAL_VOTERS;
 
-      let yes = 0;
-      let no = 0;
-      votes.forEach((v) => {
-        if (v.vote === "YES") yes++;
-        else if (v.vote === "NO") no++;
-      });
+      let yes = 0;
+      let no = 0;
+      votes.forEach((v) => {
+        if (v.vote === "YES") yes++;
+        else if (v.vote === "NO") no++;
+      });
 
-      const wrapper = document.createElement("div");
-      wrapper.className = "rule";
+      const wrapper = document.createElement("div");
+      wrapper.className = "rule";
 
-      const header = document.createElement("div");
-      header.className = "rule-header";
+      const header = document.createElement("div");
+      header.className = "rule-header";
 
-      const textEl = document.createElement("div");
-      textEl.className = "rule-text";
-      textEl.textContent = data.text || "(no text)";
-      header.appendChild(textEl);
+      const textEl = document.createElement("div");
+      textEl.className = "rule-text";
+      textEl.textContent = data.text || "(no text)";
+      header.appendChild(textEl);
 
-      const chip = document.createElement("div");
-      chip.className = "rule-chip";
-      chip.textContent = "Rule ID: " + ruleId.slice(0, 8) + "…";
-      header.appendChild(chip);
+      const chip = document.createElement("div");
+      chip.className = "rule-chip";
+      chip.textContent = "Rule ID: " + ruleId.slice(0, 8) + "…";
+      header.appendChild(chip);
 
-      wrapper.appendChild(header);
+      wrapper.appendChild(header);
 
-      const metaRow = document.createElement("div");
-      metaRow.className = "meta-row";
-      const created = formatDate(data.createdAt);
-      if (created) {
-        const createdEl = document.createElement("span");
-        createdEl.textContent = "Added " + created;
-        metaRow.appendChild(createdEl);
-      }
+      const metaRow = document.createElement("div");
+      metaRow.className = "meta-row";
+      const created = formatDate(data.createdAt);
+      if (created) {
+        const createdEl = document.createElement("span");
+        createdEl.textContent = "Added " + created;
+        metaRow.appendChild(createdEl);
+      }
 
-      const votesInfo = document.createElement("span");
-      votesInfo.textContent = voteCount + " / " + totalVoters + " votes in";
-      metaRow.appendChild(votesInfo);
-      wrapper.appendChild(metaRow);
+      const votesInfo = document.createElement("span");
+      votesInfo.textContent = voteCount + " / " + totalVoters + " votes in";
+      metaRow.appendChild(votesInfo);
+      wrapper.appendChild(metaRow);
 
-      const statusEl = document.createElement("div");
-      statusEl.className = "status";
-      wrapper.appendChild(statusEl);
+      const statusEl = document.createElement("div");
+      statusEl.className = "status";
+      wrapper.appendChild(statusEl);
 
-      const voteButtons = document.createElement("div");
-      voteButtons.className = "vote-buttons";
+      const voteButtons = document.createElement("div");
+      voteButtons.className = "vote-buttons";
 
-      const yesBtn = document.createElement("button");
-      yesBtn.textContent = "YES";
-      yesBtn.className = "primary";
+      const yesBtn = document.createElement("button");
+      yesBtn.textContent = "YES";
+      yesBtn.className = "primary";
 
-      const noBtn = document.createElement("button");
-      noBtn.textContent = "NO";
-      noBtn.className = "secondary";
+      const noBtn = document.createElement("button");
+      noBtn.textContent = "NO";
+      noBtn.className = "secondary";
 
-      voteButtons.appendChild(yesBtn);
-      voteButtons.appendChild(noBtn);
-      wrapper.appendChild(voteButtons);
+      voteButtons.appendChild(yesBtn);
+      voteButtons.appendChild(noBtn);
+      wrapper.appendChild(voteButtons);
 
-      const infoEl = document.createElement("div");
-      infoEl.className = "small";
-      wrapper.appendChild(infoEl);
+      const infoEl = document.createElement("div");
+      infoEl.className = "small";
+      wrapper.appendChild(infoEl);
 
-      const hasVoted =
-        currentVoterHash && uniqueVoters.has(currentVoterHash);
+      const hasVoted =
+        currentVoterHash && uniqueVoters.has(currentVoterHash);
 
-      if (voteCount < totalVoters) {
-        statusEl.textContent =
-          "Waiting for all four votes (" +
-          voteCount +
-          " / " +
-          totalVoters +
-          " in).";
-        statusEl.classList.remove("pass", "fail");
+      if (voteCount < totalVoters) {
+        statusEl.textContent =
+          "Waiting for all four votes (" +
+          voteCount +
+          " / " +
+          totalVoters +
+          " in).";
+        statusEl.classList.remove("pass", "fail");
 
-        const pill = document.createElement("div");
-        pill.className = "pill";
-        pill.innerHTML =
-          '<span class="pill-dot waiting"></span><span>' +
-          (hasVoted
-            ? "You’ve voted. Final result will unlock when everyone else votes."
-            : "You haven’t voted on this yet.") +
-          "</span>";
-        infoEl.appendChild(pill);
-      } else {
-        statusEl.textContent =
-          "Final tally — YES: " + yes + ", NO: " + no + ".";
-        if (yes === totalVoters) {
-          statusEl.classList.add("pass");
-          statusEl.textContent += " Rule PASSES (unanimous).";
-        } else {
-          statusEl.classList.add("fail");
-          statusEl.textContent += " Rule FAILS (not unanimous).";
-        }
+        const pill = document.createElement("div");
+        pill.className = "pill";
+        pill.innerHTML =
+          '<span class="pill-dot waiting"></span><span>' +
+          (hasVoted
+            ? "You’ve voted. Final result will unlock when everyone else votes."
+            : "You haven’t voted on this yet.") +
+          "</span>";
+        infoEl.appendChild(pill);
+      } else {
+        statusEl.textContent =
+          "Final tally — YES: " + yes + ", NO: " + no + ".";
+        if (yes === totalVoters) {
+          statusEl.classList.add("pass");
+          statusEl.textContent += " Rule PASSES (unanimous).";
+        } else {
+          statusEl.classList.add("fail");
+          statusEl.textContent += " Rule FAILS (not unanimous).";
+        }
 
-        const pill = document.createElement("div");
-        pill.className = "pill";
-        pill.innerHTML =
-          '<span class="pill-dot done"></span><span>Voting is complete. This rule is locked.</span>';
-        infoEl.appendChild(pill);
-      }
+        const pill = document.createElement("div");
+        pill.className = "pill";
+        pill.innerHTML =
+          '<span class="pill-dot done"></span><span>Voting is complete. This rule is locked.</span>';
+        infoEl.appendChild(pill);
+      }
 
-      const disableVoting =
-        !currentVoterHash || hasVoted || voteCount >= totalVoters;
+      const disableVoting =
+        !currentVoterHash || hasVoted || voteCount >= totalVoters;
 
-      if (!currentVoterHash) {
-        infoEl.textContent =
-          "Set your secret voter code above before voting on anything.";
-      }
+      if (!currentVoterHash) {
+        infoEl.textContent =
+          "Set your secret voter code above before voting on anything.";
+      }
 
-      yesBtn.disabled = disableVoting;
-      noBtn.disabled = disableVoting;
+      yesBtn.disabled = disableVoting;
+      noBtn.disabled = disableVoting;
 
-      yesBtn.addEventListener("click", () => handleVote(ruleId, "YES"));
-      noBtn.addEventListener("click", () => handleVote(ruleId, "NO"));
+      yesBtn.addEventListener("click", () => handleVote(ruleId, "YES"));
+      noBtn.addEventListener("click", () => handleVote(ruleId, "NO"));
 
-      rulesList.appendChild(wrapper);
-    }
+      rulesList.appendChild(wrapper);
+    }
 
-    async function handleVote(ruleId, voteValue) {
-      if (!currentVoterHash) {
-        alert("Set your voter code first.");
-        return;
-      }
+    async function handleVote(ruleId, voteValue) {
+      if (!currentVoterHash) {
+        alert("Set your voter code first.");
+        return;
+      }
 
-      try {
-        const voteDocRef = doc(
-          db,
-          "rules",
-          ruleId,
-          "votes",
-          currentVoterHash
-        );
+      try {
+        const voteDocRef = doc(
+          db,
+          "rules",
+          ruleId,
+          "votes",
+          currentVoterHash
+        );
 
-        await setDoc(voteDocRef, {
-          voterHash: currentVoterHash,
-          vote: voteValue
-        });
+        await setDoc(voteDocRef, {
+          voterHash: currentVoterHash,
+          vote: voteValue
+        });
 
-        loadRules();
-      } catch (err) {
-        console.error(err);
-        alert("Error submitting vote.");
-      }
-    }
+        loadRules();
+      } catch (err) {
+        console.error(err);
+        alert("Error submitting vote.");
+      }
+    }
 
-    (async () => {
-      await initVoterFromStorage();
-      await loadRules();
-    })();
-  </script>
+    (async () => {
+      await initVoterFromStorage();
+      await loadRules();
+    })();
+  </script>
 </body>
 </html>
