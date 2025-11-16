@@ -2,141 +2,498 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Apartment Rules Voting</title>
+  <title>Camel and Rain Tea – Apartment Rules Voting</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
+    :root {
+      --bg: #020617;
+      --bg-soft: #020617;
+      --card: #020617;
+      --card-soft: #020617;
+      --accent: #38bdf8;
+      --accent-soft: rgba(56, 189, 248, 0.1);
+      --accent-strong: #0ea5e9;
+      --danger: #f97373;
+      --success: #4ade80;
+      --border-subtle: #1f2937;
+      --text-main: #e5e7eb;
+      --text-muted: #9ca3af;
+      --text-soft: #6b7280;
+      --chip-bg: #111827;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      max-width: 800px;
+      margin: 0;
+      min-height: 100vh;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+      background:
+        radial-gradient(circle at top left, #38bdf8 0, transparent 55%),
+        radial-gradient(circle at bottom right, #22c55e 0, transparent 55%),
+        #020617;
+      color: var(--text-main);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .app {
+      max-width: 960px;
       margin: 0 auto;
-      padding: 1.5rem;
-      background: #f5f5f5;
+      padding: 1.5rem 1.25rem 3rem;
     }
-    h1 {
-      text-align: center;
+
+    .hero {
+      background: rgba(15, 23, 42, 0.9);
+      border-radius: 18px;
+      padding: 1.5rem 1.5rem 1.25rem;
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.7);
+      backdrop-filter: blur(18px);
+      margin-bottom: 1.75rem;
+      position: relative;
+      overflow: hidden;
     }
+
+    .hero::before {
+      content: "🐫";
+      position: absolute;
+      right: 1.5rem;
+      top: 0.9rem;
+      font-size: 1.7rem;
+      opacity: 0.9;
+    }
+
+    .hero::after {
+      content: "☔️🍵";
+      position: absolute;
+      right: 1.25rem;
+      bottom: 0.9rem;
+      font-size: 1.1rem;
+      opacity: 0.7;
+    }
+
+    .hero-title {
+      font-size: clamp(1.5rem, 3vw, 1.9rem);
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      margin: 0 0 0.25rem;
+    }
+
+    .hero-subtitle {
+      margin: 0;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .hero-tagline {
+      margin-top: 0.8rem;
+      font-size: 0.85rem;
+      color: var(--text-soft);
+    }
+
+    .badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+
+    .badge {
+      font-size: 0.74rem;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      padding: 0.25rem 0.6rem;
+      border-radius: 9999px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      background: rgba(15, 23, 42, 0.7);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .badge-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: var(--accent);
+    }
+
+    .badge-unanimous {
+      border-color: rgba(74, 222, 128, 0.6);
+    }
+
+    .badge-anon {
+      border-color: rgba(129, 140, 248, 0.6);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(0, 1.85fr);
+      gap: 1.25rem;
+    }
+
+    @media (max-width: 800px) {
+      .grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
     section {
-      background: #fff;
-      padding: 1rem 1.25rem;
-      margin-bottom: 1rem;
-      border-radius: 8px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+      background: rgba(15, 23, 42, 0.96);
+      border-radius: 16px;
+      padding: 1.15rem 1.15rem 1.25rem;
+      border: 1px solid var(--border-subtle);
+      box-shadow: 0 14px 35px rgba(15, 23, 42, 0.7);
     }
-    label {
-      display: block;
-      margin-bottom: 0.5rem;
+
+    section + section {
+      margin-top: 0;
+    }
+
+    h2 {
+      font-size: 1rem;
+      margin: 0 0 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    h2 span.eyebrow {
+      font-size: 0.85rem;
+      color: var(--accent-strong);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
       font-weight: 600;
     }
-    input[type="text"], textarea {
-      width: 100%;
-      padding: 0.5rem;
+
+    .section-desc {
+      font-size: 0.82rem;
+      color: var(--text-soft);
       margin-bottom: 0.75rem;
-      border-radius: 4px;
-      border: 1px solid #ccc;
-      font-size: 0.95rem;
     }
+
+    label {
+      display: block;
+      margin-bottom: 0.3rem;
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+
+    input[type="text"],
     textarea {
-      min-height: 60px;
+      width: 100%;
+      padding: 0.55rem 0.65rem;
+      margin-bottom: 0.6rem;
+      border-radius: 10px;
+      border: 1px solid #1f2937;
+      background: #020617;
+      color: var(--text-main);
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease,
+        background 0.15s ease;
+    }
+
+    input[type="text"]::placeholder,
+    textarea::placeholder {
+      color: #4b5563;
+    }
+
+    input[type="text"]:focus,
+    textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.45);
+      background: #020617;
+    }
+
+    textarea {
+      min-height: 70px;
       resize: vertical;
     }
+
+    .btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
     button {
       cursor: pointer;
       border: none;
-      border-radius: 4px;
-      padding: 0.4rem 0.8rem;
-      font-size: 0.9rem;
-      margin-right: 0.5rem;
-    }
-    button.primary {
-      background: #2563eb;
-      color: white;
-    }
-    button.secondary {
-      background: #e5e7eb;
-      color: #111827;
-    }
-    button:disabled {
-      opacity: 0.5;
-      cursor: default;
-    }
-    .rule {
-      border-top: 1px solid #eee;
-      padding-top: 0.75rem;
-      margin-top: 0.75rem;
-    }
-    .rule:first-child {
-      border-top: none;
-      margin-top: 0;
-      padding-top: 0;
-    }
-    .rule-text {
-      font-weight: 600;
-      margin-bottom: 0.25rem;
-    }
-    .meta {
-      font-size: 0.8rem;
-      color: #6b7280;
-      margin-bottom: 0.25rem;
-    }
-    .status {
+      border-radius: 999px;
+      padding: 0.45rem 0.9rem;
       font-size: 0.85rem;
-      margin: 0.25rem 0;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: transform 0.06s ease, box-shadow 0.06s ease,
+        background 0.15s ease, color 0.15s ease;
+      white-space: nowrap;
     }
-    .status.pass {
-      color: #15803d;
-      font-weight: 600;
+
+    button.primary {
+      background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+      color: #0b1120;
+      box-shadow: 0 8px 20px rgba(56, 189, 248, 0.5);
     }
-    .status.fail {
-      color: #b91c1c;
-      font-weight: 600;
+
+    button.primary:hover:not(:disabled) {
+      transform: translateY(-1px);
+      box-shadow: 0 12px 28px rgba(56, 189, 248, 0.6);
     }
+
+    button.secondary {
+      background: rgba(15, 23, 42, 0.95);
+      color: var(--text-main);
+      border: 1px solid #1f2937;
+    }
+
+    button.secondary:hover:not(:disabled) {
+      background: #020617;
+      border-color: #374151;
+    }
+
+    button:disabled {
+      opacity: 0.55;
+      cursor: default;
+      transform: none;
+      box-shadow: none;
+    }
+
     .small {
       font-size: 0.8rem;
-      color: #6b7280;
+      color: var(--text-soft);
+      margin-top: 0.25rem;
     }
+
     .danger {
-      color: #b91c1c;
+      color: var(--danger);
+    }
+
+    .success {
+      color: var(--success);
+    }
+
+    #rules-section {
+      max-height: 560px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    #rules-list {
+      margin-top: 0.3rem;
+      padding-top: 0.4rem;
+      border-top: 1px solid #1f2937;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: #4b5563 #020617;
+    }
+
+    #rules-list::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    #rules-list::-webkit-scrollbar-track {
+      background: #020617;
+    }
+
+    #rules-list::-webkit-scrollbar-thumb {
+      background: #4b5563;
+      border-radius: 999px;
+    }
+
+    .rule {
+      padding: 0.7rem 0.25rem;
+      border-bottom: 1px solid #111827;
+    }
+
+    .rule:last-child {
+      border-bottom: none;
+    }
+
+    .rule-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 0.5rem;
+      margin-bottom: 0.15rem;
+    }
+
+    .rule-text {
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .rule-chip {
+      background: var(--chip-bg);
+      border-radius: 999px;
+      padding: 0.15rem 0.55rem;
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      border: 1px solid #1f2937;
+      white-space: nowrap;
+    }
+
+    .meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.4rem;
+      margin: 0.1rem 0 0.35rem;
+      font-size: 0.7rem;
+      color: var(--text-soft);
+    }
+
+    .status {
+      font-size: 0.82rem;
+      margin: 0.2rem 0;
+    }
+
+    .status.pass {
+      color: var(--success);
+      font-weight: 600;
+    }
+
+    .status.fail {
+      color: var(--danger);
+      font-weight: 600;
+    }
+
+    .vote-buttons {
+      display: flex;
+      gap: 0.45rem;
+      margin-top: 0.25rem;
+      margin-bottom: 0.15rem;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.78rem;
+      color: var(--text-soft);
+    }
+
+    .pill-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+    }
+
+    .pill-dot.waiting {
+      background: var(--accent);
+    }
+
+    .pill-dot.done {
+      background: var(--success);
+    }
+
+    footer {
+      margin-top: 1.75rem;
+      text-align: center;
+      font-size: 0.72rem;
+      color: var(--text-soft);
+      opacity: 0.75;
     }
   </style>
 </head>
 <body>
-  <h1>Apartment Rules Voting</h1>
+  <div class="app">
+    <header class="hero">
+      <p class="hero-subtitle">wifi: camelandraintea</p>
+      <h1 class="hero-title">Camel and Rain Tea</h1>
+      <p class="hero-subtitle">Apartment Rules Voting</p>
+      <p class="hero-tagline">
+        Anonymous proposals. Anonymous votes. A rule only passes if all four of you say yes.
+      </p>
+      <div class="badge-row">
+        <div class="badge badge-unanimous">
+          <span class="badge-dot"></span>
+          <span>Unanimous only</span>
+        </div>
+        <div class="badge badge-anon">
+          <span class="badge-dot"></span>
+          <span>Anonymous &amp; low-drama</span>
+        </div>
+        <div class="badge">
+          <span class="badge-dot"></span>
+          <span>Results only after 4 votes</span>
+        </div>
+      </div>
+    </header>
 
-  <section id="voter-section">
-    <h2>Your voter code</h2>
-    <p class="small">
-      Each roommate has a secret code. Enter yours once per device. Nobody else will see it;
-      only a hash is stored.
-    </p>
-    <label for="voterCodeInput">Secret voter code</label>
-    <input type="text" id="voterCodeInput" placeholder="your-secret-phrase" />
-    <button class="primary" id="setCodeBtn">Set code</button>
-    <p id="voterStatus" class="small"></p>
-  </section>
+    <main class="grid">
+      <section id="voter-section">
+        <h2>
+          <span class="eyebrow">Step 1</span> Set your secret voter code
+        </h2>
+        <p class="section-desc">
+          Each roommate picks a private code (only you know yours). This stays on your device and
+          is stored as a hash. No names, no emails, no linking votes to people.
+        </p>
+        <label for="voterCodeInput">Secret voter code</label>
+        <input
+          type="text"
+          id="voterCodeInput"
+          placeholder="something only you will remember"
+        />
+        <div class="btn-row">
+          <button class="primary" id="setCodeBtn">
+            <span>Set code</span>
+          </button>
+        </div>
+        <p id="voterStatus" class="small"></p>
 
-  <section id="propose-section">
-    <h2>Propose a new rule</h2>
-    <p class="small">Rules must be general, not targeting a specific person by name.</p>
-    <label for="ruleText">Rule text</label>
-    <textarea id="ruleText" placeholder="No loud music after 11pm."></textarea>
-    <button class="primary" id="proposeBtn">Submit rule</button>
-    <p id="proposeStatus" class="small"></p>
-  </section>
+        <hr style="border: 0; border-top: 1px solid #1f2937; margin: 1rem 0 0.75rem;" />
 
-  <section id="rules-section">
-    <h2>Open rules</h2>
-    <p class="small">
-      These are all rules currently in the system. Each roommate can vote once per rule.
-      Results only show after all 4 votes are in.
-    </p>
-    <div id="rulesContainer">
-      <p class="small">Loading rules…</p>
-    </div>
-  </section>
+        <h2>
+          <span class="eyebrow">Step 2</span> Add a rule
+        </h2>
+        <p class="section-desc">
+          Anyone can propose a rule. Keep it general (no names, no targeting specific people).
+        </p>
+        <label for="ruleText">Rule text</label>
+        <textarea id="ruleText" placeholder="No loud music after 11pm."></textarea>
+        <div class="btn-row">
+          <button class="primary" id="proposeBtn">
+            <span>Submit rule</span>
+          </button>
+        </div>
+        <p id="proposeStatus" class="small"></p>
+      </section>
 
-  <!-- Firebase via CDN, using modular SDK -->
+      <section id="rules-section">
+        <h2>
+          <span class="eyebrow">Step 3</span> Vote on open rules
+        </h2>
+        <p class="section-desc">
+          Once a week, everyone opens this page, sets their code, and votes
+          <strong>YES</strong> or <strong>NO</strong> on each rule. When all four
+          votes are in, the final tally appears. Unanimous yes = the rule is adopted.
+        </p>
+
+        <div id="rules-list">
+          <p class="small">Loading rules…</p>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      Camel and Rain Tea &middot; Anonymous roommate constitution engine
+    </footer>
+  </div>
+
+  <!-- Firebase + app logic -->
   <script type="module">
-    // Import Firebase modules from CDN (version number may change over time)
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
     import {
       getFirestore,
@@ -150,19 +507,19 @@
       orderBy
     } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
 
+    // TODO: paste your actual Firebase config here (the one you already used)
     const firebaseConfig = {
-      apiKey: "AIzaSyAGgZCLDYuVuH2lGZtuOzw8zgmJeLDsUHI",
-      authDomain: "apt-rules--polling.firebaseapp.com",
-      projectId: "apt-rules--polling",
-      storageBucket: "apt-rules--polling.firebasestorage.app",
-      messagingSenderId: "969696072614",
-      appId: "1:969696072614:web:08eae8b668499a80e3f567",
-      measurementId: "G-PCE37BPYND"
-    };
+      apiKey: "YOUR_API_KEY_HERE",
+      authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_PROJECT_ID.appspot.com",
+      messagingSenderId: "YOUR_SENDER_ID",
+      appId: "YOUR_APP_ID"
+    };
 
+    // 4 roommates, 4 votes required before results show
     const TOTAL_VOTERS = 4;
 
-    // ---- basic setup ----
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
@@ -174,30 +531,32 @@
     const proposeBtn = document.getElementById("proposeBtn");
     const proposeStatus = document.getElementById("proposeStatus");
 
-    const rulesContainer = document.getElementById("rulesContainer");
+    const rulesList = document.getElementById("rules-list");
 
     let currentVoterHash = null;
 
-    // ---- utility: hash function for codes (SHA-256 -> hex) ----
+    // --- hashing helper ---
     async function hashCodeToHex(code) {
       const enc = new TextEncoder();
       const data = enc.encode(code);
       const hashBuffer = await crypto.subtle.digest("SHA-256", data);
       const hashArray = Array.from(new Uint8Array(hashBuffer));
-      return hashArray.map(b => b.toString(16).padStart(2, "0")).join("");
+      return hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
     }
 
     function shortHash(hash) {
       return hash ? hash.substring(0, 8) + "…" : "";
     }
 
-    // Load voter hash from localStorage if present
+    // restore voter hash from localStorage if present
     async function initVoterFromStorage() {
       const stored = localStorage.getItem("voterHash");
       if (stored) {
         currentVoterHash = stored;
-        voterStatus.textContent = "Voter code set (hash " + shortHash(stored) + ")";
+        voterStatus.textContent =
+          "Voter code set (hash " + shortHash(stored) + ").";
         voterStatus.classList.remove("danger");
+        voterStatus.classList.add("success");
       }
     }
 
@@ -206,29 +565,36 @@
       if (!code) {
         voterStatus.textContent = "Enter a non-empty code.";
         voterStatus.classList.add("danger");
+        voterStatus.classList.remove("success");
         return;
       }
-      const hash = await hashCodeToHex(code);
+
+      const hash = await hashCodeToHex(code);
       currentVoterHash = hash;
       localStorage.setItem("voterHash", hash);
-      voterStatus.textContent = "Voter code set (hash " + shortHash(hash) + ")";
+
+      voterStatus.textContent =
+        "Voter code set (hash " + shortHash(hash) + "). Keep this code secret.";
       voterStatus.classList.remove("danger");
+      voterStatus.classList.add("success");
       voterInput.value = "";
-      // reload rule status to show if you've voted
+
       loadRules();
     });
 
-    // ---- propose rule ----
+    // --- propose rule ---
     proposeBtn.addEventListener("click", async () => {
       const text = ruleTextInput.value.trim();
       if (!text) {
         proposeStatus.textContent = "Rule text can’t be empty.";
         proposeStatus.classList.add("danger");
+        proposeStatus.classList.remove("success");
         return;
       }
+
       proposeBtn.disabled = true;
       proposeStatus.textContent = "Submitting…";
-      proposeStatus.classList.remove("danger");
+      proposeStatus.classList.remove("danger", "success");
 
       try {
         await addDoc(collection(db, "rules"), {
@@ -236,6 +602,7 @@
           createdAt: serverTimestamp()
         });
         proposeStatus.textContent = "Rule submitted.";
+        proposeStatus.classList.add("success");
         ruleTextInput.value = "";
         loadRules();
       } catch (err) {
@@ -247,45 +614,57 @@
       }
     });
 
-    // ---- load and render rules ----
+    // --- load and render rules ---
     async function loadRules() {
-      rulesContainer.innerHTML = "<p class='small'>Loading…</p>";
+      rulesList.innerHTML = "<p class='small'>Loading…</p>";
       try {
         const rulesRef = collection(db, "rules");
         const qRules = query(rulesRef, orderBy("createdAt", "desc"));
         const snap = await getDocs(qRules);
 
         if (snap.empty) {
-          rulesContainer.innerHTML = "<p class='small'>No rules yet.</p>";
+          rulesList.innerHTML =
+            "<p class='small'>No rules yet. Someone be brave and add the first one.</p>";
           return;
         }
 
-        rulesContainer.innerHTML = "";
+        rulesList.innerHTML = "";
         for (const ruleDoc of snap.docs) {
           await renderRule(ruleDoc);
         }
       } catch (err) {
         console.error(err);
-        rulesContainer.innerHTML = "<p class='small danger'>Error loading rules.</p>";
+        rulesList.innerHTML =
+          "<p class='small danger'>Error loading rules. Check Firebase config / rules.</p>";
       }
+    }
+
+    function formatDate(ts) {
+      if (!ts || !ts.toDate) return "";
+      const d = ts.toDate();
+      return d.toLocaleString(undefined, {
+        month: "short",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit"
+      });
     }
 
     async function renderRule(ruleDoc) {
       const data = ruleDoc.data();
       const ruleId = ruleDoc.id;
 
-      // fetch votes for this rule
       const votesRef = collection(db, "rules", ruleId, "votes");
       const votesSnap = await getDocs(votesRef);
+      const votes = votesSnap.docs.map((d) => d.data());
 
-      const votes = votesSnap.docs.map(d => d.data());
-      const uniqueVoters = new Set(votes.map(v => v.voterHash));
+      const uniqueVoters = new Set(votes.map((v) => v.voterHash));
       const voteCount = uniqueVoters.size;
       const totalVoters = TOTAL_VOTERS;
 
       let yes = 0;
       let no = 0;
-      votes.forEach(v => {
+      votes.forEach((v) => {
         if (v.vote === "YES") yes++;
         else if (v.vote === "NO") no++;
       });
@@ -293,21 +672,41 @@
       const wrapper = document.createElement("div");
       wrapper.className = "rule";
 
+      const header = document.createElement("div");
+      header.className = "rule-header";
+
       const textEl = document.createElement("div");
       textEl.className = "rule-text";
       textEl.textContent = data.text || "(no text)";
-      wrapper.appendChild(textEl);
+      header.appendChild(textEl);
 
-      const metaEl = document.createElement("div");
-      metaEl.className = "meta";
-      metaEl.textContent = "Rule ID: " + ruleId;
-      wrapper.appendChild(metaEl);
+      const chip = document.createElement("div");
+      chip.className = "rule-chip";
+      chip.textContent = "Rule ID: " + ruleId.slice(0, 8) + "…";
+      header.appendChild(chip);
+
+      wrapper.appendChild(header);
+
+      const metaRow = document.createElement("div");
+      metaRow.className = "meta-row";
+      const created = formatDate(data.createdAt);
+      if (created) {
+        const createdEl = document.createElement("span");
+        createdEl.textContent = "Added " + created;
+        metaRow.appendChild(createdEl);
+      }
+
+      const votesInfo = document.createElement("span");
+      votesInfo.textContent = voteCount + " / " + totalVoters + " votes in";
+      metaRow.appendChild(votesInfo);
+      wrapper.appendChild(metaRow);
 
       const statusEl = document.createElement("div");
       statusEl.className = "status";
       wrapper.appendChild(statusEl);
 
-      const buttonsEl = document.createElement("div");
+      const voteButtons = document.createElement("div");
+      voteButtons.className = "vote-buttons";
 
       const yesBtn = document.createElement("button");
       yesBtn.textContent = "YES";
@@ -317,49 +716,59 @@
       noBtn.textContent = "NO";
       noBtn.className = "secondary";
 
-      buttonsEl.appendChild(yesBtn);
-      buttonsEl.appendChild(noBtn);
-      wrapper.appendChild(buttonsEl);
+      voteButtons.appendChild(yesBtn);
+      voteButtons.appendChild(noBtn);
+      wrapper.appendChild(voteButtons);
 
       const infoEl = document.createElement("div");
       infoEl.className = "small";
       wrapper.appendChild(infoEl);
 
-      // figure out if current voter has voted
-      let hasVoted = false;
-      if (currentVoterHash && votes.some(v => v.voterHash === currentVoterHash)) {
-        hasVoted = true;
-      }
+      const hasVoted =
+        currentVoterHash && uniqueVoters.has(currentVoterHash);
 
-      // UI logic: if not all votes are in, only show "X/4 votes submitted".
-      // Once all votes are in, show YES/NO counts and pass/fail.
       if (voteCount < totalVoters) {
-        statusEl.textContent = `Votes submitted: ${voteCount} / ${totalVoters}`;
+        statusEl.textContent =
+          "Waiting for all four votes (" +
+          voteCount +
+          " / " +
+          totalVoters +
+          " in).";
         statusEl.classList.remove("pass", "fail");
-        infoEl.textContent = hasVoted
-          ? "You have already voted on this rule. Results will show when everyone has voted."
-          : "You haven’t voted yet. You’ll see results after all votes are in.";
+
+        const pill = document.createElement("div");
+        pill.className = "pill";
+        pill.innerHTML =
+          '<span class="pill-dot waiting"></span><span>' +
+          (hasVoted
+            ? "You’ve voted. Final result will unlock when everyone else votes."
+            : "You haven’t voted on this yet.") +
+          "</span>";
+        infoEl.appendChild(pill);
       } else {
-        statusEl.textContent = `Final tally — YES: ${yes}, NO: ${no}`;
+        statusEl.textContent =
+          "Final tally — YES: " + yes + ", NO: " + no + ".";
         if (yes === totalVoters) {
           statusEl.classList.add("pass");
-          statusEl.textContent += " → Rule PASSES (unanimous).";
+          statusEl.textContent += " Rule PASSES (unanimous).";
         } else {
           statusEl.classList.add("fail");
-          statusEl.textContent += " → Rule FAILS (not unanimous).";
+          statusEl.textContent += " Rule FAILS (not unanimous).";
         }
-        infoEl.textContent = "Voting is complete. You cannot change votes.";
+
+        const pill = document.createElement("div");
+        pill.className = "pill";
+        pill.innerHTML =
+          '<span class="pill-dot done"></span><span>Voting is complete. This rule is locked.</span>';
+        infoEl.appendChild(pill);
       }
 
-      // Disable buttons if:
-      // - No voter code set
-      // - Already voted
-      // - All votes are in (closed)
       const disableVoting =
         !currentVoterHash || hasVoted || voteCount >= totalVoters;
 
       if (!currentVoterHash) {
-        infoEl.textContent = "Set your voter code above before voting.";
+        infoEl.textContent =
+          "Set your secret voter code above before voting on anything.";
       }
 
       yesBtn.disabled = disableVoting;
@@ -368,10 +777,9 @@
       yesBtn.addEventListener("click", () => handleVote(ruleId, "YES"));
       noBtn.addEventListener("click", () => handleVote(ruleId, "NO"));
 
-      rulesContainer.appendChild(wrapper);
+      rulesList.appendChild(wrapper);
     }
 
-    // ---- voting ----
     async function handleVote(ruleId, voteValue) {
       if (!currentVoterHash) {
         alert("Set your voter code first.");
@@ -379,10 +787,14 @@
       }
 
       try {
-        const voteDocRef = doc(db, "rules", ruleId, "votes", currentVoterHash);
+        const voteDocRef = doc(
+          db,
+          "rules",
+          ruleId,
+          "votes",
+          currentVoterHash
+        );
 
-        // We could check if doc exists to prevent changes, but for 4 roommates
-        // this front-end check + social agreement is usually enough.
         await setDoc(voteDocRef, {
           voterHash: currentVoterHash,
           vote: voteValue
@@ -395,17 +807,10 @@
       }
     }
 
-    // ---- startup ----
     (async () => {
       await initVoterFromStorage();
       await loadRules();
     })();
-
-    // ---- helper for YOU (the dev) to generate hashes once ----
-    // Open browser devtools on this page and run:
-    //   hashCodeToHex("your-secret-code-here").then(console.log)
-    // Take the printed hex string and paste it into ALLOWED_VOTER_HASHES above.
   </script>
 </body>
 </html>
-
