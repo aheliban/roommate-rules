@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Camel & Rain Tea – Apt Rules Voting</title>
+  <title>Camel and Rain Tea – Apartment Rules Voting</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <!-- Cute rounded font -->
@@ -18,7 +18,7 @@
       --card: #ffffff;
       --card-soft: #fef9ff;
 
-      --accent: #f9a8d4;            /* baby pink */
+      --accent: #f9a8d4;            /* baby pink (default accent) */
       --accent-soft: rgba(249, 168, 212, 0.18);
       --accent-strong: #ec4899;     /* strong pink/magenta */
 
@@ -79,9 +79,8 @@
       overflow: hidden;
     }
 
-    /* kawaii doodles */
     .hero::before {
-      content: "🐪";
+      content: "🐫✨";
       position: absolute;
       right: 1.7rem;
       top: 1.1rem;
@@ -90,7 +89,7 @@
     }
 
     .hero::after {
-      content: "🌧️☕️";
+      content: "☔️🍵";
       position: absolute;
       left: 1.6rem;
       bottom: 1rem;
@@ -211,7 +210,8 @@
     }
 
     input[type="text"],
-    textarea {
+    textarea,
+    select {
       width: 100%;
       padding: 0.6rem 0.7rem;
       margin-bottom: 0.7rem;
@@ -231,7 +231,8 @@
     }
 
     input[type="text"]:focus,
-    textarea:focus {
+    textarea:focus,
+    select:focus {
       border-color: var(--accent);
       box-shadow: 0 0 0 2px var(--accent-soft);
       background: #ffffff;
@@ -308,6 +309,11 @@
       margin-top: 0.35rem;
     }
 
+    .small-tight {
+      font-size: 0.78rem;
+      color: var(--text-soft);
+    }
+
     .danger {
       color: var(--danger);
     }
@@ -323,13 +329,67 @@
       flex-direction: column;
     }
 
+    .tab-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.35rem;
+      flex-wrap: wrap;
+    }
+
+    .tab {
+      background: #f9fafb;
+      border-radius: 999px;
+      border: 1px solid #e5e7eb;
+      padding: 0.28rem 0.9rem;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .tab.active {
+      background: #111827;
+      color: #f9fafb;
+      border-color: #111827;
+    }
+
     .rules-top-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 0.75rem;
       flex-wrap: wrap;
-      margin-bottom: 0.3rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .rules-controls-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      margin-bottom: 0.35rem;
+    }
+
+    .controls-left,
+    .controls-right {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+    }
+
+    .small-btn {
+      font-size: 0.78rem;
+      padding: 0.3rem 0.7rem;
+    }
+
+    .small-select {
+      width: auto;
+      display: inline-block;
+      font-size: 0.78rem;
+      padding: 0.2rem 0.6rem;
+      margin-bottom: 0;
+      border-radius: 999px;
     }
 
     .hide-toggle {
@@ -341,7 +401,7 @@
     }
 
     .hide-toggle input {
-      accent-color: #6d28d9; /* purple checkbox */
+      accent-color: #6d28d9;
     }
 
     #rules-list {
@@ -395,6 +455,15 @@
       opacity: 0.92;
     }
 
+    .rule.failed {
+      border-left: 3px solid rgba(248, 113, 113, 0.7);
+      padding-left: 0.5rem;
+    }
+
+    .rule.expired {
+      border-left: 3px dashed rgba(148, 163, 184, 0.9);
+    }
+
     .rule-header {
       display: flex;
       justify-content: space-between;
@@ -414,7 +483,7 @@
         135deg,
         rgba(233, 213, 255, 0.7),
         rgba(249, 168, 212, 0.7)
-      ); /* purple + pink */
+      );
       border-radius: 999px;
       padding: 0.2rem 0.6rem;
       font-size: 0.7rem;
@@ -433,18 +502,41 @@
       color: var(--text-soft);
     }
 
+    .cat-chip {
+      background: #eff6ff;
+      border-radius: 999px;
+      padding: 0.15rem 0.55rem;
+      font-size: 0.72rem;
+      border: 1px solid #dbeafe;
+      color: #1d4ed8;
+    }
+
+    .deadline-chip {
+      background: #fff7ed;
+      border-radius: 999px;
+      padding: 0.15rem 0.55rem;
+      font-size: 0.72rem;
+      border: 1px solid #fed7aa;
+      color: #9a3412;
+    }
+
     .status {
       font-size: 0.82rem;
       margin: 0.2rem 0;
     }
 
     .status.pass {
-      color: var(--success); /* green */
+      color: var(--success);
       font-weight: 700;
     }
 
     .status.fail {
       color: var(--danger);
+      font-weight: 700;
+    }
+
+    .status.expired {
+      color: #64748b;
       font-weight: 700;
     }
 
@@ -473,11 +565,41 @@
     }
 
     .pill-dot.waiting {
-      background: var(--accent-strong); /* pink */
+      background: var(--accent-strong);
     }
 
     .pill-dot.done {
-      background: var(--success);       /* green */
+      background: var(--success);
+    }
+
+    .rule-context {
+      margin-top: 0.3rem;
+      font-size: 0.78rem;
+      color: var(--text-soft);
+    }
+
+    .rule-context summary {
+      cursor: pointer;
+      list-style: none;
+      font-weight: 600;
+    }
+
+    .rule-context summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .rule-context summary::before {
+      content: "▸ ";
+      color: var(--accent-strong);
+      font-size: 0.8rem;
+    }
+
+    .rule-context[open] summary::before {
+      content: "▾ ";
+    }
+
+    .rule-context p {
+      margin: 0.3rem 0 0;
     }
 
     footer {
@@ -497,12 +619,10 @@
 <body>
   <div class="app">
     <header class="hero">
-      <!-- wifi + badges removed on purpose -->
-
-      <h1 class="hero-title">Camel & Rain Tea</h1>
-      <p class="hero-subtitle">Apt Rules Voting</p>
+      <h1 class="hero-title">Camel and Rain Tea</h1>
+      <p class="hero-subtitle">Apartment Rules Voting</p>
       <p class="hero-tagline">
-        Anonymous proposals & votes! A rule only passes if all four say yes.
+        Anonymous proposals & votes – a rule only passes if all four of you say yes.
       </p>
     </header>
 
@@ -512,8 +632,10 @@
           <span class="eyebrow">Step 1</span> Set your secret voter code
         </h2>
         <p class="section-desc">
-          Each roommate picks a private code (only you know yours).
+          Each roommate picks a private code (only you know yours). Your code is stored
+          locally on your device as a hash – no names, no emails, no way to link votes to people.
         </p>
+
         <label for="voterCodeInput">Secret voter code</label>
         <input
           type="text"
@@ -530,6 +652,17 @@
         </div>
         <p id="voterStatus" class="small"></p>
 
+        <label for="themeSelect" class="small" style="margin-top: 0.75rem;">
+          Color vibe (just for how this page looks on your device)
+        </label>
+        <select id="themeSelect" class="small-select">
+          <option value="default">All colors (default)</option>
+          <option value="green">Black + green theme</option>
+          <option value="blue">Sky blue theme</option>
+          <option value="pink">Baby pink theme</option>
+          <option value="purple">Light purple theme</option>
+        </select>
+
         <p class="small" style="margin-top: 0.4rem;">
           Your code is only saved on your device (as a hash). No one – including the person who made this page –
           can see who voted what.
@@ -543,8 +676,23 @@
         <p class="section-desc">
           Anyone can propose a rule. Keep it general and kind (no names, no calling people out).
         </p>
+
+        <label for="ruleCategory">Category</label>
+        <select id="ruleCategory">
+          <option value="kitchen">Kitchen</option>
+          <option value="noise">Noise / quiet hours</option>
+          <option value="bathroom">Bathroom</option>
+          <option value="guests">Guests</option>
+          <option value="money">Money / shared costs</option>
+          <option value="misc" selected>Misc</option>
+        </select>
+
         <label for="ruleText">Rule text</label>
-        <textarea id="ruleText" placeholder="No loud music after 11pm."></textarea>
+        <textarea id="ruleText" placeholder="No loud music after 11pm on weeknights."></textarea>
+
+        <label for="ruleReason">Why / context (optional)</label>
+        <textarea id="ruleReason" placeholder="Short context if helpful (e.g., sleep schedules, midterms, etc.)."></textarea>
+
         <div class="btn-row">
           <button class="primary" id="proposeBtn">
             <span>Submit rule</span>
@@ -559,16 +707,51 @@
         </h2>
         <p class="section-desc">
           Once a week, everyone opens this page, sets their code, and votes
-          <strong>YES</strong> or <strong>NO</strong> on each rule. When all four votes are in,
-          the final tally appears. Unanimous yes = the rule is adopted.
+          <strong>YES</strong> or <strong>NO</strong> on each rule. When all four votes are in
+          (or the deadline passes), the final tally appears. Unanimous yes = the rule is adopted.
         </p>
+
+        <div class="tab-row">
+          <button type="button" class="tab active" id="tabOpen">Open votes</button>
+          <button type="button" class="tab" id="tabResults">All results</button>
+        </div>
 
         <div class="rules-top-row">
           <p id="pendingSummary" class="small"></p>
-          <label class="hide-toggle small">
-            <input type="checkbox" id="hideCompletedToggle" />
-            Hide completed rules
-          </label>
+          <p id="statsSummary" class="small"></p>
+        </div>
+
+        <div class="rules-controls-row">
+          <div class="controls-left">
+            <button type="button" class="secondary small-btn" id="massYesBtn">
+              Vote YES for all pending
+            </button>
+            <button type="button" class="secondary small-btn" id="massNoBtn">
+              Vote NO for all pending
+            </button>
+          </div>
+          <div class="controls-right">
+            <label class="small-tight">
+              <input type="checkbox" id="thisWeekToggle" />
+              This week only
+            </label>
+            <label class="small-tight">
+              Category:
+              <select id="categoryFilter" class="small-select">
+                <option value="all">All</option>
+                <option value="kitchen">Kitchen</option>
+                <option value="noise">Noise</option>
+                <option value="bathroom">Bathroom</option>
+                <option value="guests">Guests</option>
+                <option value="money">Money</option>
+                <option value="misc">Misc</option>
+              </select>
+            </label>
+            <label class="hide-toggle small-tight">
+              <input type="checkbox" id="hideCompletedToggle" />
+              Hide failed/expired
+            </label>
+          </div>
         </div>
 
         <div id="rules-list">
@@ -607,26 +790,88 @@
       measurementId: "G-PCE37BPYND"
     };
 
-    // 4 roommates, so 4 votes required before results show
-    const TOTAL_VOTERS = 4;
+    const TOTAL_VOTERS = 4; // 4 roommates
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
+    // DOM refs
     const voterInput = document.getElementById("voterCodeInput");
     const setCodeBtn = document.getElementById("setCodeBtn");
     const randomCodeBtn = document.getElementById("randomCodeBtn");
     const voterStatus = document.getElementById("voterStatus");
+    const themeSelect = document.getElementById("themeSelect");
 
+    const ruleCategorySelect = document.getElementById("ruleCategory");
     const ruleTextInput = document.getElementById("ruleText");
+    const ruleReasonInput = document.getElementById("ruleReason");
     const proposeBtn = document.getElementById("proposeBtn");
     const proposeStatus = document.getElementById("proposeStatus");
 
     const rulesList = document.getElementById("rules-list");
     const pendingSummary = document.getElementById("pendingSummary");
+    const statsSummary = document.getElementById("statsSummary");
     const hideCompletedToggle = document.getElementById("hideCompletedToggle");
+    const thisWeekToggle = document.getElementById("thisWeekToggle");
+    const categoryFilterSelect = document.getElementById("categoryFilter");
+
+    const tabOpen = document.getElementById("tabOpen");
+    const tabResults = document.getElementById("tabResults");
+    const massYesBtn = document.getElementById("massYesBtn");
+    const massNoBtn = document.getElementById("massNoBtn");
 
     let currentVoterHash = null;
+    let currentView = "open"; // 'open' or 'results'
+    let lastProposeTime = 0;
+
+    // --- theme handling (per-device color vibe) ---
+    function applyTheme(choice) {
+      const root = document.documentElement;
+      switch (choice) {
+        case "green":
+          root.style.setProperty("--accent", "#4ade80");
+          root.style.setProperty("--accent-soft", "rgba(74, 222, 128, 0.18)");
+          root.style.setProperty("--accent-strong", "#16a34a");
+          break;
+        case "blue":
+          root.style.setProperty("--accent", "#7dd3fc");
+          root.style.setProperty("--accent-soft", "rgba(125, 211, 252, 0.18)");
+          root.style.setProperty("--accent-strong", "#0284c7");
+          break;
+        case "pink":
+          root.style.setProperty("--accent", "#f9a8d4");
+          root.style.setProperty("--accent-soft", "rgba(249, 168, 212, 0.18)");
+          root.style.setProperty("--accent-strong", "#ec4899");
+          break;
+        case "purple":
+          root.style.setProperty("--accent", "#e9d5ff");
+          root.style.setProperty("--accent-soft", "rgba(233, 213, 255, 0.32)");
+          root.style.setProperty("--accent-strong", "#7e22ce");
+          break;
+        default:
+          // reset to CSS defaults (pink-ish)
+          root.style.removeProperty("--accent");
+          root.style.removeProperty("--accent-soft");
+          root.style.removeProperty("--accent-strong");
+          break;
+      }
+    }
+
+    function initThemeFromStorage() {
+      const stored = localStorage.getItem("themeChoice");
+      if (stored && themeSelect) {
+        themeSelect.value = stored;
+        applyTheme(stored);
+      }
+    }
+
+    if (themeSelect) {
+      themeSelect.addEventListener("change", () => {
+        const choice = themeSelect.value;
+        localStorage.setItem("themeChoice", choice);
+        applyTheme(choice);
+      });
+    }
 
     // --- random cute code generator ---
     function generateRandomCode() {
@@ -702,7 +947,20 @@
 
     // --- propose rule ---
     proposeBtn.addEventListener("click", async () => {
+      const now = Date.now();
+      if (now - lastProposeTime < 5000) {
+        proposeStatus.textContent =
+          "Slow down a bit – finish reading the last change before adding another 😊";
+        proposeStatus.classList.add("danger");
+        proposeStatus.classList.remove("success");
+        return;
+      }
+      lastProposeTime = now;
+
       const text = ruleTextInput.value.trim();
+      const reason = ruleReasonInput.value.trim();
+      const category = (ruleCategorySelect.value || "misc").toLowerCase();
+
       if (!text) {
         proposeStatus.textContent = "Rule text can’t be empty.";
         proposeStatus.classList.add("danger");
@@ -710,18 +968,65 @@
         return;
       }
 
+      // Light "is this targeted?" nudge
+      const lower = text.toLowerCase();
+      const looksTargeted =
+        /\byou\b/.test(lower) || /\byour\b/.test(lower) || /@/.test(text);
+      if (looksTargeted) {
+        const proceed = window.confirm(
+          "This rule looks like it might be aimed at a specific person. " +
+          "It usually feels better if rules are phrased in general / neutral terms.\n\n" +
+          "Submit anyway?"
+        );
+        if (!proceed) {
+          proposeStatus.textContent =
+            "Rule not submitted – you can rephrase it to sound more general.";
+          proposeStatus.classList.add("danger");
+          proposeStatus.classList.remove("success");
+          return;
+        }
+      }
+
       proposeBtn.disabled = true;
-      proposeStatus.textContent = "Submitting…";
+      proposeStatus.textContent = "Checking…";
       proposeStatus.classList.remove("danger", "success");
 
       try {
-        await addDoc(collection(db, "rules"), {
-          text,
-          createdAt: serverTimestamp()
+        // check for duplicate rules (same text)
+        const rulesRef = collection(db, "rules");
+        const existingSnap = await getDocs(rulesRef);
+        const textLower = text.toLowerCase();
+        const duplicate = existingSnap.docs.some((d) => {
+          const dt = (d.data().text || "").trim().toLowerCase();
+          return dt === textLower;
         });
+
+        if (duplicate) {
+          proposeStatus.textContent = "Looks like this rule already exists 👀";
+          proposeStatus.classList.add("danger");
+          proposeBtn.disabled = false;
+          return;
+        }
+
+        proposeStatus.textContent = "Submitting…";
+
+        const payload = {
+          text,
+          category,
+          createdAt: serverTimestamp()
+        };
+        if (reason) {
+          payload.reason = reason;
+        }
+
+        await addDoc(rulesRef, payload);
+
         proposeStatus.textContent = "Rule submitted.";
         proposeStatus.classList.add("success");
         ruleTextInput.value = "";
+        ruleReasonInput.value = "";
+        ruleCategorySelect.value = "misc";
+
         loadRules();
       } catch (err) {
         console.error(err);
@@ -733,6 +1038,24 @@
     });
 
     // --- helpers for UI state ---
+    function getCategoryLabel(value) {
+      switch ((value || "").toLowerCase()) {
+        case "kitchen":
+          return "Kitchen";
+        case "noise":
+          return "Noise / quiet hours";
+        case "bathroom":
+          return "Bathroom";
+        case "guests":
+          return "Guests";
+        case "money":
+          return "Money / shared costs";
+        case "misc":
+        default:
+          return "Misc";
+      }
+    }
+
     function updatePendingSummary(pendingCount, totalRules) {
       if (!pendingSummary) return;
 
@@ -763,20 +1086,85 @@
       }
     }
 
-    function applyHideCompleted() {
-      if (!hideCompletedToggle) return;
-      const hide = hideCompletedToggle.checked;
-      const completedRules = document.querySelectorAll(".rule.completed");
-      completedRules.forEach((ruleEl) => {
-        ruleEl.style.display = hide ? "none" : "";
+    function updateStatsSummary(openCount, adoptedCount, failedCount) {
+      if (!statsSummary) return;
+      statsSummary.textContent =
+        "Open: " + openCount +
+        " · Adopted: " + adoptedCount +
+        " · Failed/expired: " + failedCount;
+    }
+
+    function applyFilters() {
+      const hideFailed = !!(hideCompletedToggle && hideCompletedToggle.checked);
+      const thisWeekOnly = !!(thisWeekToggle && thisWeekToggle.checked);
+      const categoryFilter = (categoryFilterSelect && categoryFilterSelect.value) || "all";
+
+      const ruleEls = document.querySelectorAll(".rule");
+      ruleEls.forEach((ruleEl) => {
+        const state = ruleEl.dataset.state || "open"; // 'open' | 'adopted' | 'failed'
+        const weekGroup = ruleEl.dataset.weekGroup || "past"; // 'this' | 'past'
+        const cat = (ruleEl.dataset.category || "misc").toLowerCase();
+
+        let show = true;
+
+        if (currentView === "open") {
+          if (state !== "open") show = false;
+        } else if (currentView === "results") {
+          if (state === "open") show = false;
+        }
+
+        if (thisWeekOnly && weekGroup !== "this") {
+          show = false;
+        }
+
+        if (categoryFilter !== "all" && cat !== categoryFilter) {
+          show = false;
+        }
+
+        if (currentView === "results" && hideFailed && state === "failed") {
+          show = false;
+        }
+
+        ruleEl.style.display = show ? "" : "none";
       });
+
+      // scroll to first rule that needs your vote in open view
+      if (currentView === "open") {
+        const target = document.querySelector(
+          '.rule.need-your-vote[data-state="open"]'
+        );
+        if (target) {
+          target.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      }
     }
 
     if (hideCompletedToggle) {
-      hideCompletedToggle.addEventListener("change", applyHideCompleted);
+      hideCompletedToggle.addEventListener("change", applyFilters);
+    }
+    if (thisWeekToggle) {
+      thisWeekToggle.addEventListener("change", applyFilters);
+    }
+    if (categoryFilterSelect) {
+      categoryFilterSelect.addEventListener("change", applyFilters);
     }
 
-    // --- build rule DOM element (returns wrapper + flags) ---
+    if (tabOpen && tabResults) {
+      tabOpen.addEventListener("click", () => {
+        currentView = "open";
+        tabOpen.classList.add("active");
+        tabResults.classList.remove("active");
+        applyFilters();
+      });
+      tabResults.addEventListener("click", () => {
+        currentView = "results";
+        tabResults.classList.add("active");
+        tabOpen.classList.remove("active");
+        applyFilters();
+      });
+    }
+
+    // --- build rule DOM element (returns metadata) ---
     async function buildRuleElement(ruleDoc) {
       const data = ruleDoc.data();
       const ruleId = ruleDoc.id;
@@ -816,11 +1204,13 @@
 
       const metaRow = document.createElement("div");
       metaRow.className = "meta-row";
+
       const createdAt = data.createdAt;
+      let createdDate = null;
       if (createdAt && createdAt.toDate) {
-        const d = createdAt.toDate();
+        createdDate = createdAt.toDate();
         const createdEl = document.createElement("span");
-        createdEl.textContent = "Added " + d.toLocaleString(undefined, {
+        createdEl.textContent = "Added " + createdDate.toLocaleString(undefined, {
           month: "short",
           day: "numeric",
           hour: "2-digit",
@@ -832,6 +1222,47 @@
       const votesInfo = document.createElement("span");
       votesInfo.textContent = voteCount + " / " + totalVoters + " votes in";
       metaRow.appendChild(votesInfo);
+
+      const category = (data.category || "misc").toLowerCase();
+      const catChip = document.createElement("span");
+      catChip.className = "cat-chip";
+      catChip.textContent = getCategoryLabel(category);
+      metaRow.appendChild(catChip);
+
+      // deadline: 7 days after createdAt
+      let isExpired = false;
+      if (createdDate) {
+        const deadline = new Date(createdDate.getTime() + 7 * 24 * 60 * 60 * 1000);
+        const now = new Date();
+        const deadlineChip = document.createElement("span");
+        deadlineChip.className = "deadline-chip";
+
+        if (voteCount >= totalVoters) {
+          deadlineChip.textContent =
+            "Voting window ended " +
+            deadline.toLocaleDateString(undefined, {
+              month: "short",
+              day: "numeric"
+            });
+        } else if (now > deadline) {
+          isExpired = true;
+          deadlineChip.textContent =
+            "Deadline passed " +
+            deadline.toLocaleDateString(undefined, {
+              month: "short",
+              day: "numeric"
+            });
+        } else {
+          deadlineChip.textContent =
+            "Vote by " +
+            deadline.toLocaleDateString(undefined, {
+              month: "short",
+              day: "numeric"
+            });
+        }
+        metaRow.appendChild(deadlineChip);
+      }
+
       wrapper.appendChild(metaRow);
 
       const statusEl = document.createElement("div");
@@ -859,43 +1290,76 @@
 
       const hasVoted =
         currentVoterHash && uniqueVoters.has(currentVoterHash);
-      const isCompleted = voteCount >= totalVoters;
-      const needsYourVote = !!(currentVoterHash && !hasVoted && !isCompleted);
 
-      if (voteCount < totalVoters) {
+      // classify rule state
+      let state = "open"; // 'open' | 'adopted' | 'failed'
+      if (voteCount >= totalVoters) {
+        if (yes === totalVoters) {
+          state = "adopted";
+        } else {
+          state = "failed";
+        }
+      } else if (isExpired) {
+        state = "failed";
+      }
+
+      // week grouping (7 days from now)
+      let weekGroup = "past";
+      if (createdDate) {
+        const now = new Date();
+        const diffMs = now.getTime() - createdDate.getTime();
+        const diffDays = diffMs / (1000 * 60 * 60 * 24);
+        if (diffDays <= 7) {
+          weekGroup = "this";
+        }
+      }
+
+      let needsYourVote = false;
+
+      if (state === "open") {
         statusEl.textContent =
           "Waiting for all four votes (" +
           voteCount +
           " / " +
           totalVoters +
           " in).";
-        statusEl.classList.remove("pass", "fail");
-      } else {
+      } else if (state === "adopted") {
         statusEl.textContent =
           "Final tally — YES: " + yes + ", NO: " + no + ".";
-        if (yes === totalVoters) {
-          statusEl.classList.add("pass");
-          statusEl.textContent += " Rule PASSES (unanimous).";
+        statusEl.classList.add("pass");
+        statusEl.textContent += " Adopted (unanimous).";
+      } else {
+        // failed (either not unanimous or expired)
+        statusEl.textContent =
+          "Final tally — YES: " + yes + ", NO: " + no + ".";
+        if (isExpired && voteCount < totalVoters) {
+          statusEl.classList.add("expired");
+          statusEl.textContent += " Voting expired (not enough votes).";
+          wrapper.classList.add("expired");
         } else {
           statusEl.classList.add("fail");
-          statusEl.textContent += " Rule FAILS (not unanimous).";
+          statusEl.textContent += " Not adopted (not unanimous).";
         }
       }
 
-      // Apply visual state classes
-      if (isCompleted) {
+      // visual state classes
+      if (state !== "open") {
         wrapper.classList.add("completed");
-      } else if (needsYourVote) {
+        if (state === "failed") {
+          wrapper.classList.add("failed");
+        }
+      } else if (currentVoterHash && !hasVoted) {
         wrapper.classList.add("need-your-vote");
+        needsYourVote = true;
       } else if (hasVoted) {
         wrapper.classList.add("already-voted");
       }
 
-      // Info pill / text
+      // info / pills
       if (!currentVoterHash) {
         infoEl.textContent =
           "Set your secret voter code above before voting on anything.";
-      } else if (!isCompleted) {
+      } else if (state === "open") {
         const pill = document.createElement("div");
         pill.className = "pill";
         pill.innerHTML =
@@ -915,8 +1379,21 @@
         infoEl.appendChild(pill);
       }
 
+      // optional context
+      if (data.reason) {
+        const details = document.createElement("details");
+        details.className = "rule-context";
+        const summary = document.createElement("summary");
+        summary.textContent = "Why this rule?";
+        const p = document.createElement("p");
+        p.textContent = data.reason;
+        details.appendChild(summary);
+        details.appendChild(p);
+        wrapper.appendChild(details);
+      }
+
       const disableVoting =
-        !currentVoterHash || hasVoted || isCompleted;
+        !currentVoterHash || hasVoted || state !== "open";
 
       yesBtn.disabled = disableVoting;
       noBtn.disabled = disableVoting;
@@ -924,13 +1401,24 @@
       yesBtn.addEventListener("click", () => handleVote(ruleId, "YES"));
       noBtn.addEventListener("click", () => handleVote(ruleId, "NO"));
 
-      return { wrapper, needsYourVote, isCompleted };
+      wrapper.dataset.ruleId = ruleId;
+      wrapper.dataset.state = state;
+      wrapper.dataset.weekGroup = weekGroup;
+      wrapper.dataset.category = category;
+
+      return {
+        wrapper,
+        needsYourVote,
+        state,
+        weekGroup
+      };
     }
 
     // --- load and render rules (parallel fetch) ---
     async function loadRules() {
       rulesList.innerHTML = "<p class='small'>Loading…</p>";
       if (pendingSummary) pendingSummary.textContent = "";
+      if (statsSummary) statsSummary.textContent = "";
 
       try {
         const rulesRef = collection(db, "rules");
@@ -941,36 +1429,48 @@
           rulesList.innerHTML =
             "<p class='small'>No rules yet. Someone be brave and add the first one ✨</p>";
           updatePendingSummary(0, 0);
+          updateStatsSummary(0, 0, 0);
           return;
         }
 
         rulesList.innerHTML = "";
 
-        // Build all rule elements in parallel
         const buildPromises = snap.docs.map((ruleDoc) =>
           buildRuleElement(ruleDoc)
         );
         const results = await Promise.all(buildPromises);
 
         let pendingCount = 0;
+        let openCount = 0;
+        let adoptedCount = 0;
+        let failedCount = 0;
+
         results.forEach((result) => {
           if (!result) return;
-          const { wrapper, needsYourVote } = result;
+          const { wrapper, needsYourVote, state } = result;
+
           if (needsYourVote) pendingCount++;
+          if (state === "open") openCount++;
+          else if (state === "adopted") adoptedCount++;
+          else if (state === "failed") failedCount++;
+
           rulesList.appendChild(wrapper);
         });
 
         updatePendingSummary(pendingCount, snap.docs.length);
-        applyHideCompleted();
+        updateStatsSummary(openCount, adoptedCount, failedCount);
+        applyFilters();
       } catch (err) {
         console.error(err);
         rulesList.innerHTML =
           "<p class='small danger'>Error loading rules. Check Firebase config / rules.</p>";
         updatePendingSummary(0, 0);
+        updateStatsSummary(0, 0, 0);
       }
     }
 
-    async function handleVote(ruleId, voteValue) {
+    // --- voting (single + mass) ---
+    async function handleVote(ruleId, voteValue, skipReload = false) {
       if (!currentVoterHash) {
         alert("Set your voter code first.");
         return;
@@ -990,14 +1490,68 @@
           vote: voteValue
         });
 
-        loadRules();
+        if (!skipReload) {
+          await loadRules();
+        }
       } catch (err) {
         console.error(err);
         alert("Error submitting vote.");
       }
     }
 
+    async function massVote(voteValue) {
+      if (!currentVoterHash) {
+        alert("Set your voter code first.");
+        return;
+      }
+
+      const targets = Array.from(
+        document.querySelectorAll(
+          '.rule.need-your-vote[data-state="open"]'
+        )
+      );
+
+      if (targets.length === 0) {
+        alert("No rules left that need your vote.");
+        return;
+      }
+
+      const confirmMsg =
+        `Are you sure you want to vote ${voteValue} on ${targets.length} rule(s)?`;
+      const ok = window.confirm(confirmMsg);
+      if (!ok) return;
+
+      if (massYesBtn && massNoBtn) {
+        massYesBtn.disabled = true;
+        massNoBtn.disabled = true;
+      }
+
+      try {
+        await Promise.all(
+          targets.map((el) => {
+            const ruleId = el.dataset.ruleId;
+            if (!ruleId) return Promise.resolve();
+            return handleVote(ruleId, voteValue, true);
+          })
+        );
+        await loadRules();
+      } finally {
+        if (massYesBtn && massNoBtn) {
+          massYesBtn.disabled = false;
+          massNoBtn.disabled = false;
+        }
+      }
+    }
+
+    if (massYesBtn) {
+      massYesBtn.addEventListener("click", () => massVote("YES"));
+    }
+    if (massNoBtn) {
+      massNoBtn.addEventListener("click", () => massVote("NO"));
+    }
+
     (async () => {
+      initThemeFromStorage();
       await initVoterFromStorage();
       await loadRules();
     })();
