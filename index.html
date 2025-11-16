@@ -377,10 +377,6 @@
         alert("Set your voter code first.");
         return;
       }
-      if (!ALLOWED_VOTER_HASHES.includes(currentVoterHash)) {
-        alert("Your voter code is not registered.");
-        return;
-      }
 
       try {
         const voteDocRef = doc(db, "rules", ruleId, "votes", currentVoterHash);
